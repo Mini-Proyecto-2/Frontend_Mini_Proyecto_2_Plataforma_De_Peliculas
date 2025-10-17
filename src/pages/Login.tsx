@@ -46,9 +46,9 @@ const loginSchema = z.object({
 const registerSchema = z.object({
   first_name: z.string().min(2, "El nombre es obligatorio"),
   last_name: z.string().min(2, "El apellido es obligatorio"),
+  age: z.number().min(18, "Debes ser mayor de edad"),
   email: z.string().email("Debe ser un correo válido"),
   password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
-  department: z.string().min(1, "Debes seleccionar un departamento"),
 })
 
 export default function LoginPage() {
@@ -64,7 +64,7 @@ export default function LoginPage() {
 
   const registerForm = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { first_name: "", last_name: "", email: "", password: "", department: "" },
+    defaultValues: { first_name: "", last_name: "", age: 0, email: "", password: ""},
   })
 
   const handleLogin = async (values: z.infer<typeof loginSchema>) => {
@@ -86,7 +86,6 @@ export default function LoginPage() {
       setLoading(true)
       const token = await register({
         ...values,
-        department: Number(values.department),
       })
       authLogin(token)
       navigate("/")
@@ -184,7 +183,22 @@ export default function LoginPage() {
                       </FormItem>
                     )}
                   />
+
                 </div>
+
+                  <FormField
+                    control={registerForm.control}
+                    name="age"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Edad</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Tu edad" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                 <FormField
                   control={registerForm.control}
@@ -214,30 +228,6 @@ export default function LoginPage() {
                   )}
                 />
 
-                <FormField
-                  control={registerForm.control}
-                  name="department"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Departamento</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Selecciona un departamento" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {departments.map(dep => (
-                            <SelectItem key={dep.value} value={dep.value}>
-                              {dep.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
 
                 <div className="flex justify-center">
                   <Button className="w-2/3 cursor-pointer" type="submit" disabled={loading}>
