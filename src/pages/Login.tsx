@@ -100,7 +100,7 @@ export default function LoginPage() {
   return (
     <Card className="w-full max-w-4xl h-[80vh] flex flex-col md:flex-row shadow-lg">
       <div className="flex-[2] px-8">
-        <h1 className="text-2xl font-bold mb-2 text-center">TaskFlow</h1>
+        <h1 className="text-2xl font-bold mb-2 text-center">FilmUnity</h1>
         <p className="text-sm text-gray-500 mb-6 text-center">
           Administra tus tareas de manera eficiente
         </p>
