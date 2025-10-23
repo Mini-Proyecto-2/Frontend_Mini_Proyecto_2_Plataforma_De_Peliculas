@@ -19,7 +19,10 @@ const registerSchema = z.object({
   age: z.number().min(18, "Debes tener al menos 18 años"),
   email: z.string().email("Debe ser un correo válido"),
   password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
-  confirmPassword: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+  confirmPassword: z
+    .string()
+    .min(8, "La contraseña debe tener al menos 8 caracteres")
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/, "La contraseña debe tener al menos un número, una letra mayúscula, una letra minúscula y un caracter especial"),
 })
 
 interface LocationState {
@@ -35,7 +38,7 @@ export default function RegisterModal() {
 
   const registerForm = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { first_name: "", last_name: "", age: 0, email: "", password: "", confirmPassword: "" },
+    defaultValues: { first_name: "", last_name: "", email: "", age: 18, password: "", confirmPassword: "" },
   })
 
   const handleClose = () => {
@@ -45,11 +48,21 @@ export default function RegisterModal() {
   const handleRegister = async (values: z.infer<typeof registerSchema>) => {
     try {
       setLoading(true)
-      await register(values)
-      navigate("/iniciar-sesion")
+      await register({
+        firstName: values.first_name,
+        lastName: values.last_name,
+        age: values.age,
+        email: values.email,
+        password: values.password,
+      })
+      navigate("/iniciar-sesion", { state: { background: location } })
       toast.success("Registro exitoso")
-    } catch {
-      toast.error("Error al registrar")
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error("Error al registrar")
+      }
     } finally {
       setLoading(false)
     }
@@ -109,7 +122,6 @@ export default function RegisterModal() {
                   <FormControl>
                     <Input
                       type="number"
-                      placeholder="ej: 20"
                       {...field}
                     />
                   </FormControl>
