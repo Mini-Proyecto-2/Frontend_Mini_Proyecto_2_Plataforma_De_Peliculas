@@ -6,6 +6,8 @@ import AuthLayout from "../layout/AuthLayout";
 import MainLayout from "../layout/MainLayout";
 import LoginPage from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
+import WelcomePage from "../pages/auth/Welcome";
+import SiteMapPage from "../pages/SiteMap";
 import { Toaster } from "sonner";
 
 export default function AppRouter() {
@@ -13,13 +15,16 @@ export default function AppRouter() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          {/* Rutas públicas */}
+          <Route path="/bienvenida" element={<WelcomePage />} />
+          <Route path="/mapa-sitio" element={<SiteMapPage />} />
+          
           <Route element={<PublicRoute />}>
             <Route path="/login" element={<AuthLayout />}>
               <Route index element={<LoginPage />} />
-              {/* <Route path="/registrarse" element={<Register />} />
-              <Route path="/recuperar-contraseña" element={<ForgotPassword />} /> */}
             </Route>
           </Route>
+          
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<Dashboard />} />
