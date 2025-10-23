@@ -8,6 +8,7 @@ import LoginPage from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import WelcomePage from "../pages/auth/Welcome";
 import SiteMapPage from "../pages/SiteMap";
+import NotFound from "../pages/NotFound";
 import { Toaster } from "sonner";
 
 export default function AppRouter() {
@@ -30,6 +31,9 @@ export default function AppRouter() {
               <Route index element={<Dashboard />} />
             </Route>
           </Route>
+
+          {/* Ruta 404 */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster position="bottom-right" richColors />
       </BrowserRouter>
