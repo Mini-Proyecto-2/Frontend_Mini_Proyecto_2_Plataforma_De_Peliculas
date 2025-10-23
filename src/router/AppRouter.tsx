@@ -16,23 +16,25 @@ export default function AppRouter() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          {/* Rutas públicas */}
-          <Route path="/bienvenida" element={<WelcomePage />} />
-          <Route path="/mapa-sitio" element={<SiteMapPage />} />
-          
+          {/* Public routes */}
           <Route element={<PublicRoute />}>
-            <Route path="/login" element={<AuthLayout />}>
-              <Route index element={<LoginPage />} />
+            <Route path="/" element={<WelcomePage />} />
+            <Route path="auth" element={<AuthLayout />}>
+              <Route path="iniciar-sesion" element={<LoginPage />} />
+              {/* <Route path="registrarse" element={<RegisterPage />} /> */}
             </Route>
+            <Route path="mapa-sitio" element={<SiteMapPage />} />
           </Route>
-          
+
+          {/* Protected routes */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<MainLayout />}>
+            <Route path="dashboard" element={<MainLayout />}>
               <Route index element={<Dashboard />} />
+              {/* More protected routes here */}
             </Route>
           </Route>
 
-          {/* Ruta 404 */}
+          {/* 404 - must be at the end */}
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster position="bottom-right" richColors />

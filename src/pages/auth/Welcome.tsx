@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 export default function WelcomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+    <div className="min-h-screen">
       {/* Header/Navbar */}
       <nav className="bg-slate-900/50 backdrop-blur-md border-b border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -15,12 +15,12 @@ export default function WelcomePage() {
               <span className="text-2xl font-bold text-white">FilmUnity</span>
             </div>
             <div className="flex gap-4">
-              <Link to="/login">
+              <Link to="../auth/iniciar-sesion">
                 <Button variant="ghost" className="text-white hover:bg-slate-800">
                   Iniciar Sesión
                 </Button>
               </Link>
-              <Link to="/login">
+              <Link to="../auth/registrarse">
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                   Registrarse
                 </Button>
@@ -40,7 +40,7 @@ export default function WelcomePage() {
             Descubre, valora y comenta las mejores películas. 
             Tu plataforma de streaming donde el cine cobra vida.
           </p>
-          <Link to="/login">
+          <Link to="../auth/iniciar-sesion">
             <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-8 py-6">
               <Play className="mr-2 h-5 w-5" />
               Comenzar ahora

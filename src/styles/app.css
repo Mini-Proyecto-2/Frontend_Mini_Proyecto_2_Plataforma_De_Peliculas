@@ -1,9 +1,18 @@
 /* CSS variables example */
 body {
-  background:
+  background: 
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     linear-gradient(to top, #35495ed1, #6F98C4d1),
-    url('../assets/background.jpg') center center/cover no-repeat;
+    url('../assets/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
+html {
+  height: 100%;
 }
 
 @keyframes logo-spin {
