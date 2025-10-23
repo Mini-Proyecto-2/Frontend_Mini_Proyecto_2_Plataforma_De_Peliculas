@@ -10,7 +10,8 @@ export async function login(email: string, password: string) {
     });
 
     if (!response.ok) {
-      throw new Error("Error al iniciar sesión");
+      const error = await response.json();
+      throw new Error(error.message);
     }
 
     const data = await response.json();
@@ -18,8 +19,8 @@ export async function login(email: string, password: string) {
 }
 
 export async function register(data: {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   age: number;
   email: string;
   password: string;
@@ -36,7 +37,8 @@ export async function register(data: {
     });
 
     if (!response.ok) {
-      throw new Error("Error al registrar usuario");
+      const error = await response.json();
+      throw new Error(error.message);
     }
 
     const responseData = await response.json();
@@ -53,7 +55,8 @@ export async function logout() {
     });
 
     if (!response.ok) {
-      throw new Error("Error al cerrar sesión");
+      const error = await response.json();
+      throw new Error(error.message);
     }
 
     localStorage.removeItem("auth");
