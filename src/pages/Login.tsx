@@ -7,13 +7,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
+/* import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select" */
 import {
   Form,
   FormField,
@@ -29,14 +29,14 @@ import { toast } from "sonner"
 import { useAuth } from "@/context/AuthContext"
 import { useState } from "react"
 
-const departments = [
+/* const departments = [
   { value: "1", label: "Recursos Humanos" },
   { value: "2", label: "Tecnología" },
   { value: "3", label: "Ventas" },
   { value: "4", label: "Marketing" },
   { value: "5", label: "Finanzas" },
   { value: "6", label: "Operaciones" },
-]
+] */
 
 const loginSchema = z.object({
   username: z.string().email("Debe ser un correo válido"),
@@ -98,156 +98,156 @@ export default function LoginPage() {
   }
 
   return (
-    <h1>Hola</h1>
-    // <Card className="w-full max-w-4xl h-[80vh] flex flex-col md:flex-row shadow-lg">
-    //   <div className="flex-[2] px-8">
-    //     <h1 className="text-2xl font-bold mb-2 text-center">FilmUnity</h1>
-    //     <p className="text-sm text-gray-500 mb-6 text-center">
-    //       Administra tus tareas de manera eficiente
-    //     </p>
 
-    //     <Tabs defaultValue="login" className="w-full">
-    //       <TabsList className="grid grid-cols-2 w-full mb-6">
-    //         <TabsTrigger value="login">Iniciar Sesión</TabsTrigger>
-    //         <TabsTrigger value="register">Registrarse</TabsTrigger>
-    //       </TabsList>
+    <Card className="w-full max-w-4xl h-[80vh] flex flex-col md:flex-row shadow-lg">
+      <div className="flex-[2] px-8">
+        <h1 className="text-2xl font-bold mb-2 text-center">FilmUnity</h1>
+        <p className="text-sm text-gray-500 mb-6 text-center">
+          Administra tus tareas de manera eficiente
+        </p>
 
-    //       {/* Login */}
-    //       <TabsContent value="login" className="mt-8">
-    //         <Form {...loginForm}>
-    //           <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
-    //             <FormField
-    //               control={loginForm.control}
-    //               name="username"
-    //               render={({ field }) => (
-    //                 <FormItem>
-    //                   <FormLabel>Correo electrónico</FormLabel>
-    //                   <FormControl>
-    //                     <Input placeholder="tu@email.com" {...field} />
-    //                   </FormControl>
-    //                   <FormMessage />
-    //                 </FormItem>
-    //               )}
-    //             />
+        <Tabs defaultValue="login" className="w-full">
+          <TabsList className="grid grid-cols-2 w-full mb-6">
+            <TabsTrigger value="login">Iniciar Sesión</TabsTrigger>
+            <TabsTrigger value="register">Registrarse</TabsTrigger>
+          </TabsList>
 
-    //             <FormField
-    //               control={loginForm.control}
-    //               name="password"
-    //               render={({ field }) => (
-    //                 <FormItem>
-    //                   <FormLabel>Contraseña</FormLabel>
-    //                   <FormControl>
-    //                     <Input type="password" placeholder="********" {...field} />
-    //                   </FormControl>
-    //                   <FormMessage />
-    //                 </FormItem>
-    //               )}
-    //             />
+          {/* Login */}
+          <TabsContent value="login" className="mt-8">
+            <Form {...loginForm}>
+              <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
+                <FormField
+                  control={loginForm.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Correo electrónico</FormLabel>
+                      <FormControl>
+                        <Input placeholder="tu@email.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-    //             <div className="flex justify-center">
-    //               <Button className="w-2/3 mt-8 cursor-pointer" type="submit" disabled={loading}>
-    //                 {loading ? "Cargando..." : "Iniciar Sesión"}
-    //               </Button>
-    //             </div>
-    //           </form>
-    //         </Form>
-    //       </TabsContent>
+                <FormField
+                  control={loginForm.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Contraseña</FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="********" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-    //       {/* Registro */}
-    //       <TabsContent value="register">
-    //         <Form {...registerForm}>
-    //           <form onSubmit={registerForm.handleSubmit(handleRegister)} className="space-y-4">
-    //             <div className="grid grid-cols-2 gap-x-4">
-    //               <FormField
-    //                 control={registerForm.control}
-    //                 name="first_name"
-    //                 render={({ field }) => (
-    //                   <FormItem>
-    //                     <FormLabel>Nombre</FormLabel>
-    //                     <FormControl>
-    //                       <Input placeholder="Tu nombre" {...field} />
-    //                     </FormControl>
-    //                     <FormMessage />
-    //                   </FormItem>
-    //                 )}
-    //               />
-    //               <FormField
-    //                 control={registerForm.control}
-    //                 name="last_name"
-    //                 render={({ field }) => (
-    //                   <FormItem>
-    //                     <FormLabel>Apellido</FormLabel>
-    //                     <FormControl>
-    //                       <Input placeholder="Tu apellido" {...field} />
-    //                     </FormControl>
-    //                     <FormMessage />
-    //                   </FormItem>
-    //                 )}
-    //               />
+                <div className="flex justify-center">
+                  <Button className="w-2/3 mt-8 cursor-pointer" type="submit" disabled={loading}>
+                    {loading ? "Cargando..." : "Iniciar Sesión"}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </TabsContent>
 
-    //             </div>
+          {/* Registro */}
+          <TabsContent value="register">
+            <Form {...registerForm}>
+              <form onSubmit={registerForm.handleSubmit(handleRegister)} className="space-y-4">
+                <div className="grid grid-cols-2 gap-x-4">
+                  <FormField
+                    control={registerForm.control}
+                    name="first_name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nombre</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Tu nombre" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={registerForm.control}
+                    name="last_name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Apellido</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Tu apellido" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-    //               <FormField
-    //                 control={registerForm.control}
-    //                 name="age"
-    //                 render={({ field }) => (
-    //                   <FormItem>
-    //                     <FormLabel>Edad</FormLabel>
-    //                     <FormControl>
-    //                       <Input placeholder="Tu edad" {...field} />
-    //                     </FormControl>
-    //                     <FormMessage />
-    //                   </FormItem>
-    //                 )}
-    //               />
+                </div>
 
-    //             <FormField
-    //               control={registerForm.control}
-    //               name="email"
-    //               render={({ field }) => (
-    //                 <FormItem>
-    //                   <FormLabel>Correo electrónico</FormLabel>
-    //                   <FormControl>
-    //                     <Input placeholder="tu@email.com" {...field} />
-    //                   </FormControl>
-    //                   <FormMessage />
-    //                 </FormItem>
-    //               )}
-    //             />
+                  <FormField
+                    control={registerForm.control}
+                    name="age"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Edad</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Tu edad" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-    //             <FormField
-    //               control={registerForm.control}
-    //               name="password"
-    //               render={({ field }) => (
-    //                 <FormItem>
-    //                   <FormLabel>Contraseña</FormLabel>
-    //                   <FormControl>
-    //                     <Input type="password" placeholder="********" {...field} />
-    //                   </FormControl>
-    //                   <FormMessage />
-    //                 </FormItem>
-    //               )}
-    //             />
+                <FormField
+                  control={registerForm.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Correo electrónico</FormLabel>
+                      <FormControl>
+                        <Input placeholder="tu@email.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={registerForm.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Contraseña</FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="********" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
 
-    //             <div className="flex justify-center">
-    //               <Button className="w-2/3 cursor-pointer" type="submit" disabled={loading}>
-    //                 {loading ? "Registrando..." : "Registrarse"}
-    //               </Button>
-    //             </div>
-    //           </form>
-    //         </Form>
-    //       </TabsContent>
-    //     </Tabs>
-    //   </div>
+                <div className="flex justify-center">
+                  <Button className="w-2/3 cursor-pointer" type="submit" disabled={loading}>
+                    {loading ? "Registrando..." : "Registrarse"}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </TabsContent>
+        </Tabs>
+      </div>
 
-    //   <div className="flex-[2] hidden md:flex">
-    //     <img
-    //       src="/imagen.png"
-    //       alt="Ilustración de inicio de sesión"
-    //       className="w-full h-full object-cover"
-    //     />
-    //   </div>
-    // </Card>
+      <div className="flex-[2] hidden md:flex">
+        <img
+          src="/imagen.png"
+          alt="Ilustración de inicio de sesión"
+          className="w-full h-full object-cover"
+        />
+      </div>
+    </Card>
   )
 }
