@@ -1,9 +1,16 @@
-import { Link } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Film, Play, Star, Users, Heart, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
 export default function WelcomePage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleOpenModal = (path: string) => {
+    navigate(path, { state: { background: location } });
+  };
+
   return (
     <div className="min-h-screen">
       {/* Header/Navbar */}
@@ -15,16 +22,19 @@ export default function WelcomePage() {
               <span className="text-2xl font-bold text-white">FilmUnity</span>
             </div>
             <div className="flex gap-4">
-              <Link to="../auth/iniciar-sesion">
-                <Button variant="ghost" className="text-white hover:bg-slate-800">
-                  Iniciar Sesión
-                </Button>
-              </Link>
-              <Link to="../auth/registrarse">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                  Registrarse
-                </Button>
-              </Link>
+              <Button 
+                variant="ghost" 
+                className="text-white hover:border-white hover:rounded-10"
+                onClick={() => handleOpenModal('/iniciar-sesion')}
+              >
+                Iniciar Sesión
+              </Button>
+              <Button 
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => handleOpenModal('/registrarse')}
+              >
+                Registrarse
+              </Button>
             </div>
           </div>
         </div>
@@ -40,12 +50,14 @@ export default function WelcomePage() {
             Descubre, valora y comenta las mejores películas. 
             Tu plataforma de streaming donde el cine cobra vida.
           </p>
-          <Link to="../auth/iniciar-sesion">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-8 py-6">
-              <Play className="mr-2 h-5 w-5" />
-              Comenzar ahora
-            </Button>
-          </Link>
+          <Button 
+            size="lg" 
+            className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-8 py-6"
+            onClick={() => handleOpenModal('/iniciar-sesion')}
+          >
+            <Play className="mr-2 h-5 w-5" />
+            Comenzar ahora
+          </Button>
         </div>
 
         {/* Features */}
@@ -141,18 +153,18 @@ export default function WelcomePage() {
         {/* Footer Links */}
         <div className="mt-20 text-center">
           <div className="flex flex-wrap justify-center gap-8 text-gray-400">
-            <Link to="/sobre-nosotros" className="hover:text-white transition-colors">
+            <a href="/sobre-nosotros" className="hover:text-white transition-colors">
               Sobre nosotros
-            </Link>
-            <Link to="/mapa-sitio" className="hover:text-white transition-colors">
+            </a>
+            <a href="/mapa-sitio" className="hover:text-white transition-colors">
               Mapa del sitio
-            </Link>
-            <Link to="/contacto" className="hover:text-white transition-colors">
+            </a>
+            <a href="/contacto" className="hover:text-white transition-colors">
               Contacto
-            </Link>
-            <Link to="/ayuda" className="hover:text-white transition-colors">
+            </a>
+            <a href="/ayuda" className="hover:text-white transition-colors">
               Ayuda
-            </Link>
+            </a>
           </div>
         </div>
       </div>

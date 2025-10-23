@@ -5,7 +5,7 @@ import logo from '@/assets/logo-white.png';
 const NotFound: React.FC = () => {
 
   const handleNavigate = () => {
-    window.location.href = '/app';
+    window.location.href = '/';
   }
   return (
     <div className="flex flex-col min-h-screen min-w-screen items-center justify-center">

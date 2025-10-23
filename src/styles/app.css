@@ -15,6 +15,13 @@ html {
   height: 100%;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--primary) !important;
+}
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
