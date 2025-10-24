@@ -10,6 +10,7 @@ import NotFound from "../pages/NotFound";
 import LoginModal from "../components/modals/LoginModal";
 import RegisterModal from "../components/modals/RegisterModal";
 import ResetPasswordModal from "../components/modals/ResetPasswordModal";
+import NewPasswordModal from "../components/modals/NewPasswordModal";
 import { Toaster } from "sonner";
 
 function AppRoutes() {
@@ -22,12 +23,13 @@ function AppRoutes() {
       <Routes location={background || location}>
         {/* Auth routes */}
         <Route element={<PublicRoute />}>
-          <Route path="/" element={<WelcomePage />} />
+          <Route path="/descubre" element={<WelcomePage />} />
+          <Route path="/nueva-contraseña" element={<NewPasswordModal />} />
         </Route>
 
         {/* Protected routes */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<MainLayout />}>
+          <Route path="/" element={<MainLayout />}>
             <Route index element={<Dashboard />} />
           </Route>
         </Route>

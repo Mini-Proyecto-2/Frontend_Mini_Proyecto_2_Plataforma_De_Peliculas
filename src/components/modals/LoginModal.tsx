@@ -42,7 +42,7 @@ export default function LoginModal() {
   })
 
   const handleClose = () => {
-    navigate("/");
+    if (!loading) navigate("/descubre");
   };
 
   const handleLogin = async (values: z.infer<typeof loginSchema>) => {
@@ -50,7 +50,7 @@ export default function LoginModal() {
       setLoading(true)
       const token = await login(values.username, values.password)
       authLogin(token)
-      navigate("/dashboard")
+      navigate("/")
       toast.success("Inicio de sesión exitoso")
     } catch (error) {
       if (error instanceof Error) {

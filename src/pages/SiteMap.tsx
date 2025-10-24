@@ -9,7 +9,7 @@ export default function SiteMapPage() {
       title: "Páginas principales",
       icon: Home,
       links: [
-        { name: "Inicio", path: "/", icon: Home },
+        { name: "Inicio", path: "/descubre", icon: Home },
         { name: "Catálogo de películas", path: "/peliculas", icon: Film },
         { name: "Mis favoritos", path: "/favoritos", icon: Heart },
       ]
