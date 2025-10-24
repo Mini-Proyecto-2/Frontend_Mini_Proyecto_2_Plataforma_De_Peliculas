@@ -9,7 +9,7 @@ const FullScreenLoader = () => {
         alt="Logo FilmUnity"
         className="h-20 object-contain"
       />
-      <Spinner className="size-[5rem]" />
+      <Spinner className="size-[5rem] text-white" />
     </div>
   )
 }

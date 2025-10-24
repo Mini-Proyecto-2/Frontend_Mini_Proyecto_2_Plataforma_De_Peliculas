@@ -3,7 +3,7 @@ body {
   background: 
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     linear-gradient(to top, #35495ed1, #6F98C4d1),
-    url('../assets/background.jpg');
+    url('../src/assets/background.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
