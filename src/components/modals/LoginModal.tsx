@@ -52,8 +52,12 @@ export default function LoginModal() {
       authLogin(token)
       navigate("/dashboard")
       toast.success("Inicio de sesión exitoso")
-    } catch {
-      toast.error("Error al iniciar sesión")
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error("Error al iniciar sesión")
+      }
     } finally {
       setLoading(false)
     }
@@ -129,6 +133,17 @@ export default function LoginModal() {
             >
               {loading ? "Cargando..." : "Iniciar Sesión"}
             </Button>
+
+            <p className="text-center text-sm text-primary">
+              ¿Olvidaste tu contraseña?{" "}
+              <Link
+                to="/recuperar-contraseña"
+                state={{ background }}
+                className="primary"
+              >
+                Recupera tu contraseña
+              </Link>
+            </p>
 
             <p className="text-center text-sm text-primary">
               ¿No tienes cuenta?{" "}

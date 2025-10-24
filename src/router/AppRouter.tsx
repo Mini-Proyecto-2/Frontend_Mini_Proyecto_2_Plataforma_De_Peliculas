@@ -9,6 +9,7 @@ import SiteMapPage from "../pages/SiteMap";
 import NotFound from "../pages/NotFound";
 import LoginModal from "../components/modals/LoginModal";
 import RegisterModal from "../components/modals/RegisterModal";
+import ResetPasswordModal from "../components/modals/ResetPasswordModal";
 import { Toaster } from "sonner";
 
 function AppRoutes() {
@@ -45,6 +46,7 @@ function AppRoutes() {
         <Routes>
           <Route path="/iniciar-sesion" element={<LoginModal />} />
           <Route path="/registrarse" element={<RegisterModal />} />
+          <Route path="/recuperar-contraseña" element={<ResetPasswordModal />} />
         </Routes>
       )}
     </>
