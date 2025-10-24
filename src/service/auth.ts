@@ -51,7 +51,6 @@ export async function logout() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Token ${localStorage.getItem("auth")}`,
       },
     });
 

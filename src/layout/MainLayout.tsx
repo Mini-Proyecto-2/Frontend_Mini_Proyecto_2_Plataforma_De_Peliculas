@@ -29,8 +29,8 @@ const MainLayout = () => {
   const { authLogout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    authLogout();
+  const handleLogout = async () => {
+    await authLogout();
     toast.success("Sesión cerrada exitosamente");
     navigate('/');
   };
