@@ -9,5 +9,5 @@ export default function ProtectedRoute() {
 
   if (loading) return <FullScreenLoader />
 
-  return isLoggedIn ? <Outlet /> : <Navigate to="/login" replace />
+  return isLoggedIn ? <Outlet /> : <Navigate to="/descubre" replace />
 }
