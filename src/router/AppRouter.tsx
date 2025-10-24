@@ -11,6 +11,7 @@ import LoginModal from "../components/modals/LoginModal";
 import RegisterModal from "../components/modals/RegisterModal";
 import ResetPasswordModal from "../components/modals/ResetPasswordModal";
 import NewPasswordModal from "../components/modals/NewPasswordModal";
+import Settings from "../pages/Settings";
 import { Toaster } from "sonner";
 
 function AppRoutes() {
@@ -31,6 +32,7 @@ function AppRoutes() {
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Dashboard />} />
+            <Route path="configuracion" element={<Settings />} />
           </Route>
         </Route>
 
