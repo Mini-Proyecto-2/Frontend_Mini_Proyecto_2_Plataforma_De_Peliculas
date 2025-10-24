@@ -16,7 +16,7 @@ import { DialogDescription } from '@radix-ui/react-dialog';
 const registerSchema = z.object({
   first_name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
   last_name: z.string().min(2, "El apellido debe tener al menos 2 caracteres"),
-  age: z.number().min(18, "Debes tener al menos 18 años"),
+  age: z.coerce.number().min(18, "Debes tener al menos 18 años") as z.ZodNumber,
   email: z.string().email("Debe ser un correo válido"),
   password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
   confirmPassword: z

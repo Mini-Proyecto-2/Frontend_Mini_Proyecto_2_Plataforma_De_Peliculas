@@ -1,157 +1,204 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useApi } from "@/hooks/useApi";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { toast } from "sonner";
 
-type UserProfile = {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  age: number;
-  email: string;
-};
+import { Button } from "@/components/ui/button";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
+import { deleteProfile, getProfile, updateProfile } from "@/service/profile";
+
+const profileSchema = z.object({
+  firstName: z.string().min(1, "Este campo es obligatorio").max(50, "Máximo 50 caracteres"),
+  lastName: z.string().min(1, "Este campo es obligatorio").max(50, "Máximo 50 caracteres"),
+  age: z.coerce.number().min(18, "Debes ser mayor de edad") as z.ZodNumber,
+  email: z.string().email("Debe ser un correo electrónico válido"),
+});
+
+type UserProfile = z.infer<typeof profileSchema>;
 
 export default function Settings() {
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [age, setAge] = useState<number | string>("");
-  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { request } = useApi();
 
-  // 🔹 Cargar perfil desde /auth/profile
+  const profileForm = useForm<UserProfile>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      age: 18,
+      email: "",
+    },
+  });
+
   useEffect(() => {
     const loadProfile = async () => {
       setLoading(true);
       try {
-        const data = await request<UserProfile>("auth/profile/", "GET");
-        setProfile(data);
-        setFirstName(data.firstName);
-        setLastName(data.lastName);
-        setAge(data.age);
-        setEmail(data.email);
+        const data = await getProfile();
+        profileForm.reset(data);
+        setError(null);
       } catch {
         setError("No se pudo obtener el perfil");
+        toast.error("No se pudo obtener el perfil");
       } finally {
         setLoading(false);
       }
     };
     loadProfile();
-  }, []);
+  }, [profileForm]);
 
-  // 🔹 Guardar cambios con userId en el body
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!profile?._id) return setError("No se encontró el ID del usuario");
-    setLoading(true);
-    setError(null);
+  const onSubmit = async (data: UserProfile) => {
     try {
-      const body = {
-        user: { userId: profile._id },
-        firstName,
-        lastName,
-        age: Number(age),
-        email,
-      };
-
-      await request("auth/profile/", "PUT", body);
-      alert("✅ Perfil actualizado correctamente");
+      setLoading(true);
+      setError(null);
+      await updateProfile(data);
+      toast.success("Perfil actualizado correctamente");
     } catch {
-      setError("❌ Error al guardar cambios");
+      setError("Error al guardar cambios");
+      toast.error("Error al guardar cambios");
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔹 Eliminar cuenta con el mismo formato
   const handleDeleteAccount = async () => {
-    if (!profile?._id) return setError("No se encontró el ID del usuario");
-    const ok = confirm("¿Seguro que quieres eliminar tu cuenta?");
-    if (!ok) return;
-    setLoading(true);
+    const confirmed = confirm("¿Seguro que quieres eliminar tu cuenta?");
+    if (!confirmed) return;
+
     try {
-      const body = { user: { userId: profile._id } };
-      await request("auth/profile/", "DELETE", body);
+      setLoading(true);
+      await deleteProfile({ user: { userId: profileForm.getValues("email") } });
       localStorage.removeItem("auth");
+      toast.success("Cuenta eliminada correctamente");
       navigate("/descubre");
     } catch {
       setError("Error al eliminar la cuenta");
+      toast.error("Error al eliminar la cuenta");
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading && !profile) return <div className="text-gray-400 ml-6">Cargando perfil...</div>;
-
   return (
-    <div className="p-8 text-gray-200 max-w-2xl mx-auto">
-      <h2 className="text-3xl font-semibold mb-6 text-white">Configuración de perfil</h2>
+    <div className="p-8 max-w-2xl mx-auto">
+      <h2 className="text-3xl font-semibold mb-4 text-white">Configuración de perfil</h2>
 
-      {error && <div className="text-red-400 mb-4">{error}</div>}
+      {error && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
 
-      <form onSubmit={handleSave} className="space-y-6 bg-[#1f2a38] p-6 rounded-2xl shadow-lg">
-        <div>
-          <label className="block text-sm font-medium mb-2">Nombre</label>
-          <input
-            className="w-full bg-[#2d3748] text-gray-100 border border-gray-600 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            placeholder="Tu nombre"
-          />
-        </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Información personal</CardTitle>
+          <CardDescription>Actualiza tu información de perfil</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...profileForm}>
+            <form onSubmit={profileForm.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={profileForm.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor="firstName">Nombre</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="firstName"
+                        placeholder="Tu nombre"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        <div>
-          <label className="block text-sm font-medium mb-2">Apellido</label>
-          <input
-            className="w-full bg-[#2d3748] text-gray-100 border border-gray-600 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            placeholder="Tu apellido"
-          />
-        </div>
+              <FormField
+                control={profileForm.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor="lastName">Apellido</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="lastName"
+                        placeholder="Tu apellido"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        <div>
-          <label className="block text-sm font-medium mb-2">Edad</label>
-          <input
-            type="number"
-            className="w-full bg-[#2d3748] text-gray-100 border border-gray-600 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-            placeholder="Tu edad"
-          />
-        </div>
+              <FormField
+                control={profileForm.control}
+                name="age"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor="age">Edad</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="age"
+                        type="number"
+                        placeholder="Tu edad"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        <div>
-          <label className="block text-sm font-medium mb-2">Correo electrónico</label>
-          <input
-            className="w-full bg-[#2d3748] text-gray-100 border border-gray-600 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Tu correo electrónico"
-          />
-        </div>
+              <FormField
+                control={profileForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor="email">Correo electrónico</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="Tu correo electrónico"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        <div className="flex gap-4">
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition"
-          >
-            {loading ? "Guardando..." : "Guardar"}
-          </button>
+              <div className="flex gap-4 pt-2 justify-end">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleDeleteAccount}
+                  disabled={loading}
+                >
+                  Eliminar cuenta
+                </Button>
 
-          <button
-            type="button"
-            disabled={loading}
-            onClick={handleDeleteAccount}
-            className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition"
-          >
-            Eliminar cuenta
-          </button>
-        </div>
-      </form>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                >
+                  {loading ? "Guardando..." : "Guardar cambios"}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
