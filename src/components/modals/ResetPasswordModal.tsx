@@ -41,6 +41,7 @@ export default function ResetPasswordModal() {
   const handleResetPassword = async (values: z.infer<typeof resetPasswordSchema>) => {
     try {
       setLoading(true)
+      console.log(values)
       // await resetPassword(values.username)
       navigate("/iniciar-sesion", { state: { background: location } })
       toast.success("Correo enviado correctamente")

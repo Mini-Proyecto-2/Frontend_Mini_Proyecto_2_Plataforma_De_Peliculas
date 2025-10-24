@@ -21,8 +21,11 @@ import {
   MessageCircle,
   Settings,
   LogOut,
+  Search,
+  Bell,
 } from 'lucide-react';
 import logo from '@/assets/logo-white.png';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const MainLayout = () => {
   const { authLogout } = useAuth();
@@ -108,26 +111,21 @@ const MainLayout = () => {
             {/* Íconos y perfil */}
             <div className="flex items-center gap-6">
               {/* Buscar */}
-              <button className="text-white/90 hover:text-white transition">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
-                </svg>
-              </button>
+              <Link to="/busqueda">
+                <Search />
+              </Link>
 
               {/* Notificaciones */}
-              <button className="text-white/90 hover:text-white transition">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-              </button>
+              <Link to="/notificaciones">
+                <Bell />
+              </Link>
 
               {/* Perfil */}
-              <div className="flex items-center gap-2 cursor-pointer">
-                <img
-                  src="https://avatars.githubusercontent.com/u/123456?v=4"
-                  alt="Ricardo"
-                  className="h-8 w-8 rounded-full border border-white/30"
-                />
+              <div className="flex items-center gap-4 cursor-pointer">
+                <Avatar>
+                  <AvatarImage src="https://avatars.githubusercontent.com/u/123456?v=3" />
+                  <AvatarFallback>U</AvatarFallback>
+                </Avatar>
                 <span className="text-white font-medium ellipsis">Ricardo</span>
               </div>
             </div>
