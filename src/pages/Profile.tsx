@@ -8,8 +8,8 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 
 interface Profile {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   age: number;
 }
@@ -22,14 +22,7 @@ export default function Profile() {
     const fetchData = async () => {
       try {
         const data = await getProfile();
-        // setProfileData(data);
-        console.log(data);
-        setProfileData({
-          first_name: "Ricardo",
-          last_name: "Zapata",
-          email: "ricardozapatacruz@gmail.com",
-          age: 27,
-        });
+        setProfileData(data);
       } catch {
         toast.error("No se pudo obtener el perfil");
       }
@@ -49,7 +42,7 @@ export default function Profile() {
           <div className="flex justify-start ms-5 -mt-10">
             <Avatar className="w-20 h-20 border-4 border-white shadow-xl">
               <AvatarFallback className="bg-primary text-white text-3xl">
-                {profileData && getInitials(profileData.first_name, profileData.last_name) }
+                {profileData && getInitials(profileData.firstName, profileData.lastName) }
               </AvatarFallback>
             </Avatar>
           </div>
@@ -68,7 +61,7 @@ export default function Profile() {
                     <p className="text-foreground font-semibold">
                       {profileData && (
                         <>
-                          {profileData.first_name} {profileData.last_name}
+                          {profileData.firstName} {profileData.lastName}
                         </>
                       )}
                     </p>
