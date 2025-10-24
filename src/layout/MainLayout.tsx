@@ -21,11 +21,9 @@ import {
   MessageCircle,
   Settings,
   LogOut,
-  Search,
-  Bell,
+  User,
 } from 'lucide-react';
 import logo from '@/assets/logo-white.png';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const MainLayout = () => {
   const { authLogout } = useAuth();
@@ -84,6 +82,17 @@ const MainLayout = () => {
                       asChild
                       className="text-white hover:bg-white/10"
                     >
+                      <Link to="/perfil" className="flex items-center gap-4 py-3">
+                        <User className="h-8 w-8" />
+                        <span className="text-md">Perfil</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      className="text-white hover:bg-white/10"
+                    >
                       <Link to="/configuracion" className="flex items-center gap-4 py-3">
                         <Settings className="h-8 w-8" />
                         <span className="text-md">Configuración</span>
@@ -105,36 +114,16 @@ const MainLayout = () => {
           </SidebarFooter>
         </Sidebar>
 
-        <header className="fixed top-0 left-0 w-full z-0 bg-gradient-to-b from-black/60 via-black/40 to-transparent backdrop-blur-sm">
-          <div className="flex items-center justify-between md:justify-end p-4 gap-4">
-            <SidebarTrigger className='md:hidden' />
-            {/* Íconos y perfil */}
-            <div className="flex items-center gap-6">
-              {/* Buscar */}
-              <Link to="/busqueda">
-                <Search />
-              </Link>
-
-              {/* Notificaciones */}
-              <Link to="/notificaciones">
-                <Bell />
-              </Link>
-
-              {/* Perfil */}
-              <div className="flex items-center gap-4 cursor-pointer">
-                <Avatar>
-                  <AvatarImage src="https://avatars.githubusercontent.com/u/123456?v=3" />
-                  <AvatarFallback>U</AvatarFallback>
-                </Avatar>
-                <span className="text-white font-medium ellipsis">Ricardo</span>
-              </div>
-            </div>
+        <header className="fixed w-full top-0 left-0 z-50 bg-slate-900/50 md:hidden ">
+          <div className="flex items-center justify-between py-2 px-8">
+            <SidebarTrigger className='bg-white text-primary hover:bg-white/80'/>
+            <img src={logo} alt="FilmUnity Logo" className="h-12" />
           </div>
         </header>
 
         {/* Main Content */}
         <main className="flex w-full h-screen">
-          <section className="flex-1 ml-0 md:ml-[16rem] mt-8 p-8">
+          <section className="flex-1 ml-0 md:ml-[16rem] md:mt-0 mt-12 p-8">
             <Outlet />
           </section>
         </main>
