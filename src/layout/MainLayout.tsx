@@ -61,7 +61,7 @@ const MainLayout = () => {
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <Link to="/login" className="flex-row items-center gap-2" onClick={() => handleLogout()}>
+                        <Link to="/" className="flex-row items-center gap-2" onClick={() => handleLogout()}>
                           <LogOutIcon className="size-4" />
                           Cerrar sesión
                         </Link>

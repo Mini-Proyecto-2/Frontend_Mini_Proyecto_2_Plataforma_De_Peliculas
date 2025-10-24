@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Film, Home, LogIn, User, Heart, MessageCircle, Settings, HelpCircle } from 'lucide-react';
+import { Film, Home, LogIn, User, Heart, MessageCircle, Settings, HelpCircle, Clapperboard, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -18,7 +18,8 @@ export default function SiteMapPage() {
       title: "Usuario",
       icon: User,
       links: [
-        { name: "Iniciar sesión", path: "/login", icon: LogIn },
+        { name: "Iniciar sesión", path: "/iniciar-sesion", icon: LogIn },
+        { name: "Registrarse", path: "/registrarse", icon: UserPlus },
         { name: "Mi perfil", path: "/perfil", icon: User },
         { name: "Configuración", path: "/configuracion", icon: Settings },
       ]
@@ -43,17 +44,17 @@ export default function SiteMapPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+    <div className="min-h-screen flex flex-col justify-between">
       {/* Header */}
       <nav className="bg-slate-900/50 backdrop-blur-md border-b border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link to="/" className="flex items-center gap-2">
-              <Film className="h-8 w-8 text-blue-500" />
+              <Clapperboard className="h-8 w-8 text-white" />
               <span className="text-2xl font-bold text-white">FilmUnity</span>
             </Link>
             <Link to="/">
-              <Button variant="ghost" className="text-white hover:bg-slate-800">
+              <Button variant="ghost" className="text-white">
                 Volver al inicio
               </Button>
             </Link>
@@ -62,7 +63,7 @@ export default function SiteMapPage() {
       </nav>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Mapa del Sitio

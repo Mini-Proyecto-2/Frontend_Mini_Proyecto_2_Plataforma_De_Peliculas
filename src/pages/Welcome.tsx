@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Film, Play, Star, Users, Heart, MessageCircle } from 'lucide-react';
+import { Play, Star, Users, Heart, MessageCircle, Clapperboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -12,13 +12,13 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col justify-between">
       {/* Header/Navbar */}
       <nav className="bg-slate-900/50 backdrop-blur-md border-b border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2">
-              <Film className="h-8 w-8 text-blue-500" />
+              <Clapperboard className="h-8 w-8 text-white" />
               <span className="text-2xl font-bold text-white">FilmUnity</span>
             </div>
             <div className="flex gap-4">
@@ -41,7 +41,7 @@ export default function WelcomePage() {
       </nav>
 
       {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
             El cine nos une
@@ -174,7 +174,6 @@ export default function WelcomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center text-gray-400">
             <p>&copy; 2025 FilmUnity. El cine nos une.</p>
-            <p className="text-sm mt-2">Proyecto Integrador I (2025-2)</p>
           </div>
         </div>
       </footer>
