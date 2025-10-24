@@ -42,7 +42,7 @@ export default function LoginModal() {
   })
 
   const handleClose = () => {
-    navigate("/");
+    if (!loading) navigate("/descubre");
   };
 
   const handleLogin = async (values: z.infer<typeof loginSchema>) => {
@@ -50,10 +50,14 @@ export default function LoginModal() {
       setLoading(true)
       const token = await login(values.username, values.password)
       authLogin(token)
-      navigate("/dashboard")
+      navigate("/")
       toast.success("Inicio de sesión exitoso")
-    } catch {
-      toast.error("Error al iniciar sesión")
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error("Error al iniciar sesión")
+      }
     } finally {
       setLoading(false)
     }
@@ -129,6 +133,17 @@ export default function LoginModal() {
             >
               {loading ? "Cargando..." : "Iniciar Sesión"}
             </Button>
+
+            <p className="text-center text-sm text-primary">
+              ¿Olvidaste tu contraseña?{" "}
+              <Link
+                to="/recuperar-contraseña"
+                state={{ background }}
+                className="primary"
+              >
+                Recupera tu contraseña
+              </Link>
+            </p>
 
             <p className="text-center text-sm text-primary">
               ¿No tienes cuenta?{" "}

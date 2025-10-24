@@ -42,7 +42,7 @@ export default function RegisterModal() {
   })
 
   const handleClose = () => {
-    navigate("/");
+    if (!loading) navigate("/descubre");
   };
 
   const handleRegister = async (values: z.infer<typeof registerSchema>) => {

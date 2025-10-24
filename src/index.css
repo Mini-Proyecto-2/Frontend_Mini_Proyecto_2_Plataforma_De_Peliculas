@@ -1,5 +1,8 @@
 @import "tailwindcss";
 @import "./app.css";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -21,7 +24,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   --primary: #35495E;
-  --primary-foreground: oklch(0.985 0 0);
+  --primary-foreground: #35495E;
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -37,8 +40,8 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar: var(--primary);
+  --sidebar-foreground: var(--primary-foreground);
   --sidebar-primary: oklch(0.205 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
@@ -58,6 +61,9 @@ a.primary {
 }
 a:hover {
   text-decoration: underline;
+}
+a:hover.outline-none {
+  text-decoration: none;
 }
 
 h1 {
@@ -114,4 +120,18 @@ h1 {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+}
+
+.dark {
+  --sidebar: hsl(240 5.9% 10%);
+  --sidebar-foreground: #35495E;
+  --sidebar-primary: white;
+  --sidebar-primary-foreground: #35495E;
+  --sidebar-accent: hsl(240 3.7% 15.9%);
+  --sidebar-accent-foreground: #35495E;
+  --sidebar-border: hsl(240 3.7% 15.9%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+}
+
+@layer base {
 }
