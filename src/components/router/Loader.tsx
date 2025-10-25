@@ -1,14 +1,15 @@
 import { Spinner } from "../ui/spinner";
+import logo from "@/assets/logo-white.png";
 
 const FullScreenLoader = () => {
   return (
     <div className="flex flex-col min-h-screen min-w-screen items-center justify-center">
-      <Spinner className="size-[5rem]" />
       <img
-        src="logo-white.png"
+        src={logo}
         alt="Logo FilmUnity"
-        className="h-35 object-contain"
+        className="h-20 object-contain"
       />
+      <Spinner className="size-[5rem] text-white" />
     </div>
   )
 }

@@ -1,88 +1,134 @@
-import { NavigationMenuContent, NavigationMenuTrigger, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
-import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from '@/components/ui/navigation-menu';
-import { LogOutIcon, User, UserCircleIcon } from 'lucide-react';
-import { Outlet } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import {
+  Home,
+  Heart,
+  Star,
+  MessageCircle,
+  Settings,
+  LogOut,
+  User,
+} from 'lucide-react';
+import logo from '@/assets/logo-white.png';
 
 const MainLayout = () => {
-  const { authLogout } = useAuth()
+  const { authLogout } = useAuth();
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    authLogout()
-    toast.success("Sesión cerrada exitosamente")
-  }
+  const handleLogout = async () => {
+    await authLogout();
+    toast.success("Sesión cerrada exitosamente");
+    navigate('/');
+  };
+
+  const menuItems = [
+    { icon: Home, label: 'Inicio', href: '/' },
+    { icon: Heart, label: 'Favoritos', href: '/favoritos' },
+    { icon: Star, label: 'Calificaciones', href: '/calificaciones' },
+    { icon: MessageCircle, label: 'Comentarios', href: '/comentarios' },
+  ];
 
   return (
-    <div className="flex flex-col h-screen">
-      <nav className="bg-white shadow-sm pt-4">
-        <div className="max-w-7xl flex justify-between mx-auto px-4 pb-2">
-          <div className="flex items-center">
-            <Link to="/">
-              <img
-                src="full_logo.svg"
-                alt="Logo TaskFlow DS"
-                className="h-8 object-contain"
-              />
-            </Link>
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full">
+        {/* Sidebar */}
+        <Sidebar className='border-none z-2'>
+          <SidebarHeader className="px-6">
+            <img src={logo} alt="FilmUnity Logo" className="h-20" />
+          </SidebarHeader>
+
+          <SidebarContent className="px-3">
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu className='space-y-1'>
+                  {menuItems.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton
+                        asChild
+                        className="text-white hover:bg-white/10 data-[active=true]:bg-white/20"
+                      >
+                        <Link to={item.href} className="flex items-center gap-4 py-3 hover:outline-none">
+                          <item.icon className="h-8 w-8" />
+                          <span className="text-md">{item.label}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarContent>
+
+          <SidebarFooter className="px-3">
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu className='space-y-1'>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      className="text-white hover:bg-white/10"
+                    >
+                      <Link to="/perfil" className="flex items-center gap-4 py-3">
+                        <User className="h-8 w-8" />
+                        <span className="text-md">Perfil</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      className="text-white hover:bg-white/10"
+                    >
+                      <Link to="/configuracion" className="flex items-center gap-4 py-3">
+                        <Settings className="h-8 w-8" />
+                        <span className="text-md">Configuración</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      onClick={handleLogout}
+                      className="text-white hover:bg-white/10 hover:text-white hover:cursor-pointer flex items-center gap-4 py-3"
+                    >
+                      <LogOut className="h-8 w-8" />
+                      <span className="text-md">Cerrar Sesión</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarFooter>
+        </Sidebar>
+
+        <header className="fixed w-full top-0 left-0 z-50 bg-slate-900/50 md:hidden ">
+          <div className="flex items-center justify-between py-2 px-8">
+            <SidebarTrigger className='bg-white text-primary hover:bg-white/80'/>
+            <img src={logo} alt="FilmUnity Logo" className="h-12" />
           </div>
+        </header>
 
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                  <Link to="/">Inicio</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                  <Link to="/tareas">Mis Tareas</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>
-                  <div className="flex items-center gap-2 cursor-pointer">
-                    <UserCircleIcon className="size-4" />
-                    <span>John Doe</span>
-                  </div>
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-max">
-                    <li>
-                      <NavigationMenuLink asChild>
-                        <Link to="/perfil" className="flex-row items-center gap-2">
-                          <User className="size-4" />
-                          Perfil
-                        </Link>
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink asChild>
-                        <Link to="/login" className="flex-row items-center gap-2" onClick={() => handleLogout()}>
-                          <LogOutIcon className="size-4" />
-                          Cerrar sesión
-                        </Link>
-                      </NavigationMenuLink>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
-      </nav>
-
-      <main className="flex-1 overflow-y-auto">
-        <div className="max-w-7xl mx-auto">
-          <div className="px-4 py-6">
+        {/* Main Content */}
+        <main className="flex w-full h-screen">
+          <section className="flex-1 ml-0 md:ml-[16rem] md:mt-0 mt-12 p-8">
             <Outlet />
-          </div>
-        </div>
-      </main>
-    </div>
+          </section>
+        </main>
+      </div>
+    </SidebarProvider>
   );
 };
 

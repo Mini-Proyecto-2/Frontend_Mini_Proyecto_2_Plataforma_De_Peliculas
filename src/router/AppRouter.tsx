@@ -1,31 +1,69 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "../context/AuthContext";
 import PublicRoute from "../components/router/PublicRoute";
 import ProtectedRoute from "../components/router/ProtectedRoute";
-import AuthLayout from "../layout/AuthLayout";
 import MainLayout from "../layout/MainLayout";
-import LoginPage from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
+import WelcomePage from "../pages/Welcome";
+import SiteMapPage from "../pages/SiteMap";
+import NotFound from "../pages/NotFound";
+import LoginModal from "../components/modals/LoginModal";
+import RegisterModal from "../components/modals/RegisterModal";
+import ResetPasswordModal from "../components/modals/ResetPasswordModal";
+import NewPasswordModal from "../components/modals/NewPasswordModal";
+import Settings from "../pages/Settings";
+import Profile from "../pages/Profile";
 import { Toaster } from "sonner";
+
+function AppRoutes() {
+  const location = useLocation();
+  const background = location.state?.background;
+
+  return (
+    <>
+      {/* Rutas principales */}
+      <Routes location={background || location}>
+        {/* Auth routes */}
+        <Route element={<PublicRoute />}>
+          <Route path="/descubre" element={<WelcomePage />} />
+          <Route path="/nueva-contraseña" element={<NewPasswordModal />} />
+        </Route>
+
+        {/* Protected routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="configuracion" element={<Settings />} />
+            <Route path="perfil" element={<Profile />} />
+          </Route>
+        </Route>
+
+        {/* SiteMap */}
+        <Route path="mapa-sitio" element={<SiteMapPage />} />
+
+        {/* 404 */}
+        <Route path="*" element={<NotFound />} />
+
+
+      </Routes>
+
+      {/* Modales flotantes - solo se renderizan si hay background */}
+      {background && (
+        <Routes>
+          <Route path="/iniciar-sesion" element={<LoginModal />} />
+          <Route path="/registrarse" element={<RegisterModal />} />
+          <Route path="/recuperar-contraseña" element={<ResetPasswordModal />} />
+        </Routes>
+      )}
+    </>
+  );
+}
 
 export default function AppRouter() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
-          <Route element={<PublicRoute />}>
-            <Route path="/login" element={<AuthLayout />}>
-              <Route index element={<LoginPage />} />
-              {/* <Route path="/registrarse" element={<Register />} />
-              <Route path="/recuperar-contraseña" element={<ForgotPassword />} /> */}
-            </Route>
-          </Route>
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<MainLayout />}>
-              <Route index element={<Dashboard />} />
-            </Route>
-          </Route>
-        </Routes>
+        <AppRoutes />
         <Toaster position="bottom-right" richColors />
       </BrowserRouter>
     </AuthProvider>

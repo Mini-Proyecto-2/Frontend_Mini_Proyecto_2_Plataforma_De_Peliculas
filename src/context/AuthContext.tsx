@@ -1,13 +1,14 @@
 /* eslint-disable react-refresh/only-export-components */
 "use client"
 
+import { logout } from "@/service/auth"
 import { createContext, useContext, useState, useEffect } from "react"
 
 type AuthContextType = {
   isLoggedIn: boolean
   loading: boolean
   authLogin: (token: string) => void
-  authLogout: () => void
+  authLogout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -29,9 +30,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("auth", token)
   }
 
-  const authLogout = () => {
+  const authLogout = async () => {
     setLoading(true)
     setIsLoggedIn(false)
+    await logout();
     setTimeout(() => {
       setLoading(false)
     }, 1000);

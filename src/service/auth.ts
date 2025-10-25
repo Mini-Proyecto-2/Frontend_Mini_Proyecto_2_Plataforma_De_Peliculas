@@ -3,6 +3,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 export async function login(email: string, password: string) {
     const response = await fetch(API_URL + "auth/login/", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -10,22 +11,25 @@ export async function login(email: string, password: string) {
     });
 
     if (!response.ok) {
-      throw new Error("Error al iniciar sesión");
+      const error = await response.json();
+      throw new Error(error.message);
     }
 
     const data = await response.json();
-    return data.token;
+    console.log(data)
+    return data.userId;
 }
 
 export async function register(data: {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   age: number;
   email: string;
   password: string;
 }) {
     const response = await fetch(API_URL + "auth/register/", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -36,7 +40,8 @@ export async function register(data: {
     });
 
     if (!response.ok) {
-      throw new Error("Error al registrar usuario");
+      const error = await response.json();
+      throw new Error(error.message);
     }
 
     const responseData = await response.json();
@@ -46,14 +51,15 @@ export async function register(data: {
 export async function logout() {
     const response = await fetch(API_URL + "auth/logout/", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Token ${localStorage.getItem("auth")}`,
       },
     });
 
     if (!response.ok) {
-      throw new Error("Error al cerrar sesión");
+      const error = await response.json();
+      throw new Error(error.message);
     }
 
     localStorage.removeItem("auth");
