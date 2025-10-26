@@ -13,6 +13,7 @@ import ResetPasswordModal from "../components/modals/ResetPasswordModal";
 import NewPasswordModal from "../components/modals/NewPasswordModal";
 import Settings from "../pages/Settings";
 import Profile from "../pages/Profile";
+import Favorites from '@/pages/Favorites';
 import { Toaster } from "sonner";
 
 function AppRoutes() {
@@ -43,6 +44,8 @@ function AppRoutes() {
 
         {/* 404 */}
         <Route path="*" element={<NotFound />} />
+        {/* Favorites */}
+        <Route path="/favoritos" element={<Favorites />} />
 
 
       </Routes>
