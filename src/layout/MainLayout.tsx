@@ -1,3 +1,21 @@
+/**
+ * @file MainLayout Component
+ * @description Main application layout component with responsive sidebar navigation.
+ * Provides the primary structure for authenticated pages in Film Unity app.
+ * Includes navigation menu, user actions, and responsive mobile header.
+ * 
+ * Features:
+ * - Responsive sidebar (desktop: fixed, mobile: sheet/drawer)
+ * - User authentication integration
+ * - Navigation with active state
+ * - Logout functionality
+ * - Logo branding
+ * - Mobile-optimized header
+ * - Nested routing via Outlet
+ * 
+ * @module MainLayout
+ */
+
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
@@ -25,16 +43,32 @@ import {
 } from 'lucide-react';
 import logo from '@/assets/logo-white.png';
 
+/**
+ * Top-level layout that provides the app navigation, mobile header,
+ * and the main content region where child routes are rendered.
+ *
+ * @component
+ * @returns The application layout surrounding nested routes.
+ */
 const MainLayout = () => {
   const { authLogout } = useAuth();
   const navigate = useNavigate();
 
+  /**
+   * Handles user sign out:
+   * - Calls the `authLogout` context action
+   * - Shows a success toast
+   * - Redirects to the home route `/`
+   */
   const handleLogout = async () => {
     await authLogout();
     toast.success("Sesión cerrada exitosamente");
     navigate('/');
   };
 
+  /**
+   * Primary navigation entries displayed in the sidebar.
+   */
   const menuItems = [
     { icon: Home, label: 'Inicio', href: '/' },
     { icon: Heart, label: 'Favoritos', href: '/favoritos' },

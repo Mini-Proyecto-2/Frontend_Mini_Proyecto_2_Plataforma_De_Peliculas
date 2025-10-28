@@ -1,7 +1,33 @@
+/**
+ * @file Dashboard.tsx
+ * @description Displays key movie-related statistics and metrics in a responsive card grid layout.
+ * This component serves as the main user dashboard showing movie activity insights.
+ *
+ * @example
+ * ```tsx
+ * import Dashboard from "@/app/dashboard/page"
+ *
+ * export default function App() {
+ *   return <Dashboard />
+ * }
+ * ```
+ */
+
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
 
+/**
+ * Renders the main dashboard page.
+ * Displays static metrics for demonstration purposes such as:
+ * - Movies watched
+ * - Watch time
+ * - Ratings
+ * - Most/least watched and rated movies
+ *
+ * @component
+ * @returns {JSX.Element} A responsive grid layout with movie statistics.
+ */
 export default function Dashboard() {
   return (
     <div className="space-y-6">

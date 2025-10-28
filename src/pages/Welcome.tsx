@@ -1,12 +1,45 @@
+/**
+ * @file WelcomePage.tsx
+ * @description Landing (welcome) page for the FilmUnity platform.
+ * Introduces users to the app, its core features, and main navigation actions such as login and registration.
+ * Designed to be the first impression for new users before they explore or sign in.
+ *
+ * @example
+ * ```tsx
+ * import WelcomePage from "@/pages/WelcomePage"
+ *
+ * export default function Route() {
+ *   return <WelcomePage />
+ * }
+ * ```
+ */
+
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Play, Star, Users, Heart, MessageCircle, Clapperboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
+/**
+ * WelcomePage component.
+ *
+ * @component
+ * @returns {JSX.Element} A full landing page layout showcasing FilmUnity’s purpose and key features.
+ *
+ * @remarks
+ * - Contains navigation to **login** and **register** modal routes.
+ * - Introduces FilmUnity’s core features such as playback, community reviews, and favorites.
+ * - Uses a modern layout with TailwindCSS and Lucide icons for a cinematic aesthetic.
+ */
 export default function WelcomePage() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  /**
+   * Handles navigation to a route while preserving the background location.
+   * This allows modals (like login/register) to appear on top of the current page.
+   *
+   * @param path - Route path to navigate to (e.g., "/iniciar-sesion").
+   */
   const handleOpenModal = (path: string) => {
     navigate(path, { state: { background: location } });
   };
