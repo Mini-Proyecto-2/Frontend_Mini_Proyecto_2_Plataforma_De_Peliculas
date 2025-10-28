@@ -17,8 +17,6 @@ import {
 import {
   Home,
   Heart,
-  Star,
-  MessageCircle,
   Settings,
   LogOut,
   User,
@@ -37,9 +35,8 @@ const MainLayout = () => {
 
   const menuItems = [
     { icon: Home, label: 'Inicio', href: '/' },
+    { icon: User, label: 'Perfil', href: '/perfil' },
     { icon: Heart, label: 'Favoritos', href: '/favoritos' },
-    { icon: Star, label: 'Calificaciones', href: '/calificaciones' },
-    { icon: MessageCircle, label: 'Comentarios', href: '/comentarios' },
   ];
 
   return (
@@ -77,17 +74,6 @@ const MainLayout = () => {
             <SidebarGroup>
               <SidebarGroupContent>
                 <SidebarMenu className='space-y-1'>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      asChild
-                      className="text-white hover:bg-white/10"
-                    >
-                      <Link to="/perfil" className="flex items-center gap-4 py-3">
-                        <User className="h-8 w-8" />
-                        <span className="text-md">Perfil</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton
                       asChild
