@@ -16,6 +16,8 @@
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
+import { MovieReactionButtons } from "@/components/ui/MovieReactionButtons"
+import { getProfile } from '@/service/profile'
 
 /**
  * Renders the main dashboard page.
@@ -41,6 +43,21 @@ export default function Dashboard() {
             <p className="text-sm text-muted-foreground">Películas vistas</p>
             <p className="text-2xl font-bold">100</p>
             <p className="text-sm text-muted-foreground">en los últimos 30 días</p>
+            <div className="mt-4">
+              <MovieReactionButtons
+                movieId={1}
+                initialLiked={false}
+                onReactionService={async () => {
+                // Aquí va tu llamada al servicio
+                  await getProfile();
+                }}
+                onError={(error) => {
+                  // Manejo de errores
+                  console.error('Error al procesar la reacción:', error);
+                  // Mostrar notificación al usuario si lo deseas
+                }}
+              />
+            </div>
           </CardContent>
         </Card>
         <Card>
