@@ -100,7 +100,7 @@ const MainLayout = () => {
           </SidebarFooter>
         </Sidebar>
 
-        <header className="fixed w-full top-0 left-0 z-50 bg-slate-900/50 md:hidden ">
+        <header className="fixed w-full top-0 left-0 z-50 bg-slate-900/50 lg:hidden ">
           <div className="flex items-center justify-between py-2 px-8">
             <SidebarTrigger className='bg-white text-primary hover:bg-white/80'/>
             <img src={logo} alt="FilmUnity Logo" className="h-12" />
@@ -109,7 +109,7 @@ const MainLayout = () => {
 
         {/* Main Content */}
         <main className="flex w-full h-screen">
-          <section className="flex-1 ml-0 md:ml-[16rem] md:mt-0 mt-12 p-8">
+          <section className="flex-1 ml-0 lg:ml-[16rem] lg:mt-0 mt-12 p-8">
             <Outlet />
           </section>
         </main>

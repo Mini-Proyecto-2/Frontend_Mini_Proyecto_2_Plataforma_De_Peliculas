@@ -1,6 +1,5 @@
 "use client"
 
-import { Plus } from "lucide-react"
 import { useRef } from "react"
 import { Spinner } from "../ui/spinner"
 
@@ -44,11 +43,11 @@ const MovieRow = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <div className="relative w-full max-w-[calc(100vw-320px)]">
+    <div className="relative w-full lg:max-w-[calc(100vw-320px)] max-w-[calc(100vw-60px)]">
       {/* Desvanecido al final */}
-      <div className="absolute top-0 right-0 bottom-0 w-60 pointer-events-none z-10">
+      <div className="hidden lg:block absolute top-0 right-0 bottom-0 w-60 pointer-events-none z-10">
         <div
-          className="w-full h-[380px] backdrop-blur-sm"
+          className="w-full h-[350px] backdrop-blur-sm"
           style={{
             maskImage: 'linear-gradient(to left, black 50%, transparent 100%)',
             WebkitMaskImage: 'linear-gradient(to left, black 50%, transparent 100%)'
@@ -70,8 +69,8 @@ const MovieRow = ({ children }: { children: React.ReactNode }) => {
         }}>
         <div className="flex gap-4 w-max">
           {children}
-          <div className="w-[300px] md:w-[250px] h-[380px] bg-transparent px-15">
-            <Spinner className="size-full text-white" />
+          <div className="aspect-[9/16] h-[250px] sm:h-[280px] lg:h-[350px] bg-transparent flex items-center justify-center">
+            <Spinner className="size-[3rem] text-white" />
           </div>
         </div>
       </div>

@@ -14,9 +14,9 @@ const MovieCard: React.FC<MovieCardProps> = ({ imageUrl, url, user }) => {
   const title = extractTitleFromUrl(url)
 
   return (
-    <div className="w-[300px] md:w-[250px] h-[380px] bg-white rounded-2xl overflow-hidden">
+    <div className="h-[250px] sm:h-[280px] lg:h-[350px] aspect-[12/16] bg-white rounded-3xl overflow-hidden">
       {/* Imagen */}
-      <div className="relative h-[210px] bg-gray-200 overflow-hidden">
+      <div className="relative h-3/5 bg-gray-200 overflow-hidden">
         <img 
           src={imageUrl} 
           alt={title}
@@ -26,13 +26,13 @@ const MovieCard: React.FC<MovieCardProps> = ({ imageUrl, url, user }) => {
       </div>
       
       {/* Contenido */}
-      <div className="p-5">
-        <h3 className="text-xl font-bold text-gray-900 mb-2 ellipsis">
-          {title}
-        </h3>
-        <p className="text-gray-600 text-sm">
+      <div className="p-4">
+        <p className="text-gray-600 text-xs lg:text-sm">
           {user.name}
         </p>
+        <h3 className="text-xs sm:text-sm lg:text-lg font-bold text-gray-900">
+          {title.length > 60 ? `${title.slice(0, 60)}...` : title}
+        </h3>
       </div>
     </div>
   );
