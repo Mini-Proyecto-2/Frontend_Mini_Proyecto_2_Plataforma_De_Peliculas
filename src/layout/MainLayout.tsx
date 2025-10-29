@@ -109,7 +109,7 @@ const MainLayout = () => {
 
         {/* Main Content */}
         <main className="flex w-full h-screen">
-          <section className="flex-1 ml-0 lg:ml-[16rem] lg:mt-0 mt-12 p-8">
+          <section className="flex-1 ml-0 lg:ml-[16rem] lg:mt-0 mt-16 p-8 overflow-y-auto">
             <Outlet />
           </section>
         </main>

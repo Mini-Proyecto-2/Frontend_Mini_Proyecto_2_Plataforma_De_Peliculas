@@ -50,9 +50,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6 pb-8">
-      <div>
-        <h1 className="font-bold">Dashboard</h1>
-      </div>
+      <h1 className="font-bold">Dashboard</h1>
 
       {loading ? (
         <Spinner className="size-[3rem] text-white" />

@@ -6,12 +6,8 @@
 
 /* Ocultar scrollbar en todos los navegadores */
 * {
-  scrollbar-width: none; /* Firefox */
+  
   -ms-overflow-style: none; /* IE y Edge */
-}
-
-*::-webkit-scrollbar {
-  display: none; /* Chrome, Safari y Opera */
 }
 
 :root {
