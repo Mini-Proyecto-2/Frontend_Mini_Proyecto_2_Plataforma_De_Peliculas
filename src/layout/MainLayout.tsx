@@ -17,8 +17,6 @@ import {
 import {
   Home,
   Heart,
-  Star,
-  MessageCircle,
   Settings,
   LogOut,
   User,
@@ -37,9 +35,8 @@ const MainLayout = () => {
 
   const menuItems = [
     { icon: Home, label: 'Inicio', href: '/' },
+    { icon: User, label: 'Perfil', href: '/perfil' },
     { icon: Heart, label: 'Favoritos', href: '/favoritos' },
-    { icon: Star, label: 'Calificaciones', href: '/calificaciones' },
-    { icon: MessageCircle, label: 'Comentarios', href: '/comentarios' },
   ];
 
   return (
@@ -82,17 +79,6 @@ const MainLayout = () => {
                       asChild
                       className="text-white hover:bg-white/10"
                     >
-                      <Link to="/perfil" className="flex items-center gap-4 py-3">
-                        <User className="h-8 w-8" />
-                        <span className="text-md">Perfil</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      asChild
-                      className="text-white hover:bg-white/10"
-                    >
                       <Link to="/configuracion" className="flex items-center gap-4 py-3">
                         <Settings className="h-8 w-8" />
                         <span className="text-md">Configuración</span>
@@ -114,7 +100,7 @@ const MainLayout = () => {
           </SidebarFooter>
         </Sidebar>
 
-        <header className="fixed w-full top-0 left-0 z-50 bg-slate-900/50 md:hidden ">
+        <header className="fixed w-full top-0 left-0 z-50 bg-slate-900/50 lg:hidden ">
           <div className="flex items-center justify-between py-2 px-8">
             <SidebarTrigger className='bg-white text-primary hover:bg-white/80'/>
             <img src={logo} alt="FilmUnity Logo" className="h-12" />
@@ -123,7 +109,7 @@ const MainLayout = () => {
 
         {/* Main Content */}
         <main className="flex w-full h-screen">
-          <section className="flex-1 ml-0 md:ml-[16rem] md:mt-0 mt-12 p-8">
+          <section className="flex-1 ml-0 lg:ml-[16rem] lg:mt-0 mt-16 p-8 overflow-y-auto">
             <Outlet />
           </section>
         </main>

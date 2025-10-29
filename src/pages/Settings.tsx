@@ -75,7 +75,6 @@ export default function Settings() {
     try {
       setLoading(true);
       await deleteProfile({ user: { userId: profileForm.getValues("email") } });
-      localStorage.removeItem("auth");
       toast.success("Cuenta eliminada correctamente");
       navigate("/descubre");
     } catch {

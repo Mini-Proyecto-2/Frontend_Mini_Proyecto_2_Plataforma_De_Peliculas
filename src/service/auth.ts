@@ -16,7 +16,6 @@ export async function login(email: string, password: string) {
     }
 
     const data = await response.json();
-    console.log(data)
     return data.userId;
 }
 
@@ -48,6 +47,18 @@ export async function register(data: {
     return responseData.token;
 }
 
+export async function session() {
+    const response = await fetch(API_URL + "auth/session/", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response.status;
+}
+
 export async function logout() {
     const response = await fetch(API_URL + "auth/logout/", {
       method: "POST",
@@ -61,7 +72,5 @@ export async function logout() {
       const error = await response.json();
       throw new Error(error.message);
     }
-
-    localStorage.removeItem("auth");
 }
 
