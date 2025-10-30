@@ -15,14 +15,8 @@
 
 "use client"
 
-import { useEffect, useState, type JSX } from "react"
-import { getPexelsList } from "../service/pexels"
-import { Spinner } from "@/components/ui/spinner"
-import { toast } from "sonner"
 import MovieRow from "@/components/movie/MovieRow"
-import type { PexelsVideo } from "@/types/pexels"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircleIcon } from "lucide-react"
+import type { JSX } from "react"
 
 /**
  * Renders the main dashboard page.

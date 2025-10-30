@@ -13,7 +13,7 @@ interface MovieRowProps {
 
 const MovieRow = ({ category }: MovieRowProps) => {
   const [loading, setLoading] = useState(true)
-  const [list, setList] = useState<PexelsVideo[]>([]) 
+  const [list, setList] = useState<PexelsVideo[]>([])
   const scrollRef = useRef<HTMLDivElement>(null)
   const isDragging = useRef(false)
   const startX = useRef(0)
@@ -94,19 +94,21 @@ const MovieRow = ({ category }: MovieRowProps) => {
           msOverflowStyle: 'none'
         }}>
         <div className="flex gap-4 w-max">
-            {list.map((pexels: PexelsVideo, index: number) => (
-              <div key={index} className="flex-shrink-0">
-                <MovieCard
-                  id={pexels.id}
-                  imageUrl={pexels.image}
-                  url={pexels.url}
-                  user={pexels.user}
-                />
-              </div>
-            ))}
-          <div className="aspect-[9/16] h-[250px] sm:h-[280px] lg:h-[350px] bg-transparent flex items-center justify-center">
-            <Spinner className="size-[3rem] text-white" />
-          </div>
+          {list.map((video: PexelsVideo, index: number) => (
+            <div key={index} className="flex-shrink-0">
+              <MovieCard
+                id={video.id}
+                imageUrl={video.image}
+                url={video.url}
+                user={video.user}
+              />
+            </div>
+          ))}
+          {loading && (
+            <div className="aspect-[9/16] h-[250px] sm:h-[280px] lg:h-[350px] bg-transparent flex items-center justify-center">
+              <Spinner className="size-[3rem] text-white" />
+            </div>
+          )}
         </div>
       </div>
 
