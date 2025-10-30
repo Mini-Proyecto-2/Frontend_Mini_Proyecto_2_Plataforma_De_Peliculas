@@ -1,17 +1,49 @@
+/**
+ * @file Dialog Component
+ * @description Accessible modal dialog component built on Radix UI primitives.
+ * Features overlay backdrop, animations, focus management, and keyboard navigation.
+ * Renders in a portal outside the normal DOM hierarchy for proper layering.
+ * 
+ * Part of shadcn/ui component library.
+ * @see {@link https://ui.shadcn.com/docs/components/dialog shadcn/ui Dialog Documentation}
+ * @see {@link https://www.radix-ui.com/primitives/docs/components/dialog Radix UI Dialog}
+ */
+
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Root container that controls the open/close state of the dialog.
+ * Use this component to wrap the entire modal structure.
+ *
+ * @see https://www.radix-ui.com/primitives/docs/components/dialog
+ */
 const Dialog = DialogPrimitive.Root
 
+/**
+ * Trigger element that opens the dialog when interacted with (e.g., a button).
+ */
 const DialogTrigger = DialogPrimitive.Trigger
 
+/**
+ * Renders the dialog content within a React portal, ensuring proper stacking and isolation.
+ */
 const DialogPortal = DialogPrimitive.Portal
 
+/**
+ * Button or element that closes the dialog when clicked or activated.
+ */
 const DialogClose = DialogPrimitive.Close
 
+/**
+ * Overlay backdrop behind the dialog content, dimming the rest of the interface.
+ *
+ * @component
+ * @param props - All Radix `Overlay` props plus an optional `className` for styling.
+ */
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
@@ -27,6 +59,29 @@ const DialogOverlay = React.forwardRef<
 ))
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
+/**
+ * Main dialog container that holds the modal content.
+ * Includes transitions, positioning, and a built-in close button.
+ *
+ * @component
+ * @param props - All Radix `Content` props plus an optional `className` and `children` nodes.
+ * @example
+ * ```tsx
+ * <Dialog>
+ *   <DialogTrigger>Open Dialog</DialogTrigger>
+ *   <DialogContent>
+ *     <DialogHeader>
+ *       <DialogTitle>Example Modal</DialogTitle>
+ *       <DialogDescription>Additional context goes here.</DialogDescription>
+ *     </DialogHeader>
+ *     <DialogFooter>
+ *       <button>Cancel</button>
+ *       <button>Confirm</button>
+ *     </DialogFooter>
+ *   </DialogContent>
+ * </Dialog>
+ * ```
+ */
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
@@ -51,6 +106,9 @@ const DialogContent = React.forwardRef<
 ))
 DialogContent.displayName = DialogPrimitive.Content.displayName
 
+/**
+ * Wrapper for the dialog header, typically containing title and description.
+ */
 const DialogHeader = ({
   className,
   ...props
@@ -65,6 +123,10 @@ const DialogHeader = ({
 )
 DialogHeader.displayName = "DialogHeader"
 
+/**
+ * Container for dialog actions, usually placed at the bottom of the modal.
+ * Stacks buttons on mobile and aligns them to the right on larger screens.
+ */
 const DialogFooter = ({
   className,
   ...props
@@ -79,6 +141,9 @@ const DialogFooter = ({
 )
 DialogFooter.displayName = "DialogFooter"
 
+/**
+ * Accessible title element for the dialog. Maps to `aria-labelledby` automatically.
+ */
 const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
@@ -94,6 +159,10 @@ const DialogTitle = React.forwardRef<
 ))
 DialogTitle.displayName = DialogPrimitive.Title.displayName
 
+/**
+ * Supplementary description text for the dialog, providing additional context.
+ * Maps to `aria-describedby` automatically.
+ */
 const DialogDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
