@@ -16,7 +16,7 @@
 
 import * as React from "react"
 
-const MOBILE_BREAKPOINT = 768
+const MOBILE_BREAKPOINT = 1024
 
 /**
  * Determines if the current viewport width is smaller than the defined mobile breakpoint.

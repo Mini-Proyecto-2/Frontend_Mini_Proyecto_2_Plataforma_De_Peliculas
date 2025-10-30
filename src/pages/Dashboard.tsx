@@ -15,9 +15,33 @@
 
 "use client"
 
-import { Card, CardContent } from "@/components/ui/card"
-import { MovieReactionButtons } from "@/components/ui/MovieReactionButtons"
-import { getProfile } from '@/service/profile'
+import { useEffect, useState } from "react"
+import { getPexelsList } from "../service/pexels"
+import { Spinner } from "@/components/ui/spinner"
+import MovieCard from "@/components/movie/MovieCard"
+import { toast } from "sonner"
+import MovieRow from "@/components/movie/MovieRow"
+
+
+type PexelsVideo = {
+  avg_color: null | string;
+  duration: number;
+  full_res: null | string;
+  height: number;
+  id: number;
+  image: string;
+  tags: string[];
+  url: string;
+  user: {
+    id: number;
+    name: string;
+    url: string;
+  };
+  video_files: {}[];
+  video_pictures: {}[];
+  width: number;
+}
+
 
 /**
  * Renders the main dashboard page.
@@ -31,71 +55,65 @@ import { getProfile } from '@/service/profile'
  * @returns {JSX.Element} A responsive grid layout with movie statistics.
  */
 export default function Dashboard() {
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-      </div>
+  const [pexelsList, setPexelsList] = useState<PexelsVideo[]>([])
+  const [loading, setLoading] = useState(true)
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Películas vistas</p>
-            <p className="text-2xl font-bold">100</p>
-            <p className="text-sm text-muted-foreground">en los últimos 30 días</p>
-            <div className="mt-4">
-              <MovieReactionButtons
-                movieId={1}
-                initialLiked={false}
-                onReactionService={async () => {
-                // Aquí va tu llamada al servicio
-                  await getProfile();
-                }}
-                onError={(error) => {
-                  // Manejo de errores
-                  console.error('Error al procesar la reacción:', error);
-                  // Mostrar notificación al usuario si lo deseas
-                }}
-              />
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Tiempo de películas vistas</p>
-            <p className="text-2xl font-bold">5 horas</p>
-            <p className="text-sm text-muted-foreground">en los últimos 30 días</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Métricas de rating</p>
-            <p className="text-2xl font-bold">4.5</p>
-            <p className="text-sm text-muted-foreground">en los últimos 30 días</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Películas más vistas</p>
-            <p className="text-2xl font-bold">The Shawshank Redemption</p>
-            <p className="text-sm text-muted-foreground">100 veces</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Películas menos vistas</p>
-            <p className="text-2xl font-bold">The Godfather</p>
-            <p className="text-sm text-muted-foreground">10 veces</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Películas más valoradas</p>
-            <p className="text-2xl font-bold">The Godfather</p>
-            <p className="text-sm text-muted-foreground">4.8/5</p>
-          </CardContent>
-        </Card>
-      </div>
+  useEffect(() => {
+    const fetchPexelsList = async () => {
+      try {
+        setLoading(true)
+        const response = await getPexelsList()
+        setPexelsList(response.videos)
+      } catch (error) {
+        toast.error("Error al cargar la lista de videos")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchPexelsList()
+  }, [])
+
+  return (
+    <div className="space-y-6 pb-8">
+      <h1 className="font-bold">Dashboard</h1>
+
+      {loading ? (
+        <Spinner className="size-[3rem] text-white" />
+      ) : (
+        <>
+        <section className="space-y-4">
+          <h3 className="text-2xl font-bold">Videos</h3>
+          <MovieRow
+          >
+            {pexelsList.map((pexels: PexelsVideo, index: number) => (
+              <div key={index} className="flex-shrink-0">
+                <MovieCard
+                  imageUrl={pexels.image}
+                  url={pexels.url}
+                  user={pexels.user}
+                />
+              </div>
+            ))}
+          </MovieRow>
+        </section>
+        <section className="space-y-4">
+          <h3 className="text-2xl font-bold">Favoritos</h3>
+          <MovieRow
+          >
+            {pexelsList.map((pexels: PexelsVideo, index: number) => (
+              <div key={index} className="flex-shrink-0">
+                <MovieCard
+                  imageUrl={pexels.image}
+                  url={pexels.url}
+                  user={pexels.user}
+                />
+              </div>
+            ))}
+          </MovieRow>
+        </section>
+        </>
+      )}
     </div>
   )
 }

@@ -27,7 +27,7 @@ const API_URL = import.meta.env.VITE_API_URL;
  * }
  * ```
  */
-export async function login(email: string, password: string) {
+export async function login(email: string, password: string): Promise<string> {
     const response = await fetch(API_URL + "auth/login/", {
       method: "POST",
       credentials: "include",
@@ -43,7 +43,6 @@ export async function login(email: string, password: string) {
     }
 
     const data = await response.json();
-    console.log(data)
     return data.userId;
 }
 
@@ -80,7 +79,7 @@ export async function register(data: {
   age: number;
   email: string;
   password: string;
-}) {
+}): Promise<string> {
     const response = await fetch(API_URL + "auth/register/", {
       method: "POST",
       credentials: "include",
@@ -102,6 +101,18 @@ export async function register(data: {
     return responseData.token;
 }
 
+export async function session() {
+    const response = await fetch(API_URL + "auth/session/", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response.status;
+}
+
 /**
  * Logs the user out by sending a logout request to the backend and clearing local storage.
  *
@@ -117,7 +128,7 @@ export async function register(data: {
  * console.log("User successfully logged out.");
  * ```
  */
-export async function logout() {
+export async function logout(): Promise<void> {
     const response = await fetch(API_URL + "auth/logout/", {
       method: "POST",
       credentials: "include",
@@ -130,7 +141,5 @@ export async function logout() {
       const error = await response.json();
       throw new Error(error.message);
     }
-
-    localStorage.removeItem("auth");
 }
 

@@ -20,12 +20,15 @@ import Dashboard from "../pages/Dashboard";
 import WelcomePage from "../pages/Welcome";
 import SiteMapPage from "../pages/SiteMap";
 import NotFound from "../pages/NotFound";
+import Favorites from '../pages/Favorites';
+import MovieDetail from "../pages/MovieDetail";
 import LoginModal from "../components/modals/LoginModal";
 import RegisterModal from "../components/modals/RegisterModal";
 import ResetPasswordModal from "../components/modals/ResetPasswordModal";
 import NewPasswordModal from "../components/modals/NewPasswordModal";
 import Settings from "../pages/Settings";
 import Profile from "../pages/Profile";
+
 import { Toaster } from "sonner";
 
 /**
@@ -80,6 +83,8 @@ function AppRoutes() {
             <Route index element={<Dashboard />} />
             <Route path="configuracion" element={<Settings />} />
             <Route path="perfil" element={<Profile />} />
+            <Route path="/favoritos" element={<Favorites />} />
+            <Route path="/pelicula/:id" element={<MovieDetail />} />
           </Route>
         </Route>
 
@@ -87,7 +92,7 @@ function AppRoutes() {
         <Route path="mapa-sitio" element={<SiteMapPage />} />
 
         {/* 404 */}
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />        
 
 
       </Routes>
@@ -117,10 +122,10 @@ function AppRoutes() {
 export default function AppRouter() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <AppRoutes />
-        <Toaster position="bottom-right" richColors />
-      </BrowserRouter>
+       <BrowserRouter>
+         <AppRoutes />
+         <Toaster position="bottom-right" richColors />
+       </BrowserRouter>
     </AuthProvider>
   );
 }

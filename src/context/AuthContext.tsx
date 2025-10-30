@@ -17,7 +17,7 @@
 /* eslint-disable react-refresh/only-export-components */
 "use client"
 
-import { logout } from "@/service/auth"
+import { logout, session } from "@/service/auth"
 import { createContext, useContext, useState, useEffect } from "react"
 
 /**
@@ -91,20 +91,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const authToken = localStorage.getItem("auth")
-    if (authToken) setIsLoggedIn(true)
-    setTimeout(() => {
-      setLoading(false)
-    }, 1000);
+    const checkSession = async () => {
+      try {
+        const sessionData = await session();
+        if (sessionData === 401) {
+          setIsLoggedIn(false)
+        } else {
+          setIsLoggedIn(true)
+        }
+      } catch (error) {
+        console.error("Error al verificar sesión:", error)
+        setIsLoggedIn(false)
+      } finally {
+        setTimeout(() => {
+          setLoading(false)
+        }, 1000);
+      }
+    }
+
+    checkSession();
   }, [])
 
   /**
    * Stores the auth token and updates login state.
+<<<<<<< HEAD
    * @param token - The JWT or session token to store.
    */
   const authLogin = (token: string) => {
+=======
+   */
+  const authLogin = () => {
+>>>>>>> origin/Develop
     setIsLoggedIn(true)
-    localStorage.setItem("auth", token)
   }
 
   /**
@@ -118,7 +136,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setTimeout(() => {
       setLoading(false)
     }, 1000);
-    localStorage.removeItem("auth")
   }
 
   return (

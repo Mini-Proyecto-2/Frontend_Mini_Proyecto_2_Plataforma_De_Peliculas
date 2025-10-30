@@ -44,6 +44,7 @@ const loginSchema = z.object({
 })
 
 /**
+<<<<<<< HEAD
  * Type inference from Zod schema for form values.
  * 
  * @typedef {Object} LoginFormValues
@@ -53,6 +54,8 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 /**
+=======
+>>>>>>> origin/Develop
  * Interface for React Router location state.
  * Used to preserve the background location when modal is opened.
  * 
