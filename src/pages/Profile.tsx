@@ -22,6 +22,8 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { getProfile } from '@/service/profile';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { Spinner } from '@/components/ui/spinner';
+import { Skeleton } from '@/components/ui/skeleton';
 
 /**
  * Shape of the profile object returned by the API.
@@ -84,7 +86,7 @@ export default function Profile() {
           <div className="flex justify-start ms-5 -mt-10">
             <Avatar className="w-20 h-20 border-4 border-white shadow-xl">
               <AvatarFallback className="bg-primary text-white text-3xl">
-                {profileData && getInitials(profileData.firstName, profileData.lastName)}
+                {profileData ? getInitials(profileData.firstName, profileData.lastName) : <Spinner className="w-12 h-12" />}
               </AvatarFallback>
             </Avatar>
           </div>
@@ -101,10 +103,12 @@ export default function Profile() {
                 <div className="flex-1">
                   <p className="text-sm text-muted-foreground font-medium">Nombre completo</p>
                   <p className="text-foreground font-semibold">
-                    {profileData && (
+                    {profileData ? (
                       <>
                         {profileData.firstName} {profileData.lastName}
                       </>
+                    ) : (
+                      <Skeleton className="w-60 h-4 mt-2" />
                     )}
                   </p>
                 </div>
@@ -119,7 +123,11 @@ export default function Profile() {
                 <div className="flex-1">
                   <p className="text-sm text-muted-foreground font-medium">Correo electrónico</p>
                   <p className="text-foreground font-semibold">
-                    {profileData && profileData.email}
+                    {profileData ? (
+                      profileData.email
+                    ) : (
+                      <Skeleton className="w-60 h-4 mt-2" />
+                    )}
                   </p>
                 </div>
               </CardContent>
@@ -133,15 +141,15 @@ export default function Profile() {
                 <div className="flex-1">
                   <p className="text-sm text-muted-foreground font-medium">Edad</p>
                   <p className="text-foreground font-semibold">
-                    {profileData && profileData.age + " años"}
+                    {profileData ? profileData.age + " años" : <Skeleton className="w-24 h-6" />}
                   </p>
                 </div>
               </CardContent>
             </Card>
 
             {/* Botón de acción */}
-            <div className="mt-6">
-              <Button onClick={() => navigate('/configuracion')} className="w-full" size="lg">
+            <div className="flex justify-end mt-6">
+              <Button onClick={() => navigate('/configuracion')} size="lg">
                 Editar Perfil
               </Button>
             </div>

@@ -174,7 +174,7 @@ export default function Settings() {
       )}
 
       <div className="flex gap-8 justify-center sm:flex-row flex-col">
-        <Card className="sm:max-w-[400px] max-w-full sm:w-1/2 w-full">
+        <Card className="sm:max-w-[500px] max-w-full sm:w-1/2 w-full">
           <CardHeader>
             <CardTitle>Información personal</CardTitle>
             <CardDescription>Actualiza tu información de perfil. Mantén tus datos actualizados para una experiencia personalizada.</CardDescription>
@@ -187,7 +187,7 @@ export default function Settings() {
                     control={editProfileForm.control}
                     name="firstName"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="w-1/2">
                         <FormLabel htmlFor="firstName">Nombre</FormLabel>
                         <FormControl>
                           <Input
@@ -204,7 +204,7 @@ export default function Settings() {
                     control={editProfileForm.control}
                     name="lastName"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="w-1/2">
                         <FormLabel htmlFor="lastName">Apellido</FormLabel>
                         <FormControl>
                           <Input
@@ -235,6 +235,7 @@ export default function Settings() {
                             defaultValue={0}
                             min={18}
                             max={120}
+                            className="[&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                           />
                         </FormControl>
                         <FormMessage />
@@ -274,7 +275,7 @@ export default function Settings() {
             </Form>
           </CardContent>
         </Card>
-        <Card className="border-red-500 border-2 max-w-full sm:max-w-[400px] sm:w-1/2">
+        <Card className="border-red-500 border-2 max-w-full sm:max-w-[500px] sm:w-1/2">
           <CardHeader>
             <CardTitle className="text-red-500">Atención</CardTitle>
             <CardDescription className="text-red-500">
@@ -328,8 +329,8 @@ export default function Settings() {
                 <div className="flex gap-4 pt-2 justify-end">
                   <Button
                     type="submit"
-                    variant="outline"
-                    className="text-red-500"
+                    variant="destructive"
+                    className="text-white"
                     disabled={loading}
                   >
                     {loading ? "Eliminando..." : "Eliminar cuenta"}
