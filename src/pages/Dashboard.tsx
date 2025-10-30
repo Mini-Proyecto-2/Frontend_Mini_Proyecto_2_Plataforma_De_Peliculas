@@ -71,7 +71,7 @@ export default function Dashboard(): JSX.Element {
       <h1 className="font-bold">Dashboard</h1>
 
       {loading ? (
-        <Spinner className="size-[3rem] text-white" />
+        <Spinner className="size-[4rem] text-white mx-auto mt-12" />
       ) : error ? (
         <>
           <Alert variant="destructive" className="w-1/2 bg-red-200">
