@@ -30,6 +30,7 @@ import Settings from "../pages/Settings";
 import Profile from "../pages/Profile";
 
 import { Toaster } from "sonner";
+import type { JSX } from "react";
 
 /**
  * AppRoutes component.
@@ -54,7 +55,7 @@ import { Toaster } from "sonner";
  * }
  * ```
  */
-function AppRoutes() {
+function AppRoutes(): JSX.Element {
   // Current route location, possibly containing a `background` entry when navigating to modal routes.
   const location = useLocation();
 

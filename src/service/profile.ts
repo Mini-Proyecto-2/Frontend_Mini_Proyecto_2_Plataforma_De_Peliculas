@@ -45,7 +45,7 @@ export const getProfile = async () => {
  * console.log("Profile updated:", updatedProfile);
  * ```
  */
-export const updateProfile = async (body: any) => {
+export const updateProfile = async (body: any): Promise<any> => {
   return request("auth/profile", "PUT", body);
 };
 

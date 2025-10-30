@@ -76,75 +76,76 @@ export default function Profile() {
   };
 
   return (
-    <div className="container max-w-4xl mx-auto p-4 mt-16">
-      <Card className="border-0 shadow-lg">       
+    <div className="container w-full p-6">
+      <h1 className="font-bold">Perfil</h1>
+      <Card className="border-0 shadow-lg mt-16 w-2/3 mx-auto px-4">
         <CardHeader className="relative pt-0 pb-6">
           {/* Avatar */}
           <div className="flex justify-start ms-5 -mt-10">
             <Avatar className="w-20 h-20 border-4 border-white shadow-xl">
               <AvatarFallback className="bg-primary text-white text-3xl">
-                {profileData && getInitials(profileData.firstName, profileData.lastName) }
+                {profileData && getInitials(profileData.firstName, profileData.lastName)}
               </AvatarFallback>
             </Avatar>
           </div>
         </CardHeader>
 
         <CardContent className="space-y-3 px-6 pb-6">
-            <>
-              {/* Tarjetas de información */}
-              <Card className="border shadow-sm hover:shadow-md transition-shadow">
-                <CardContent className="flex items-start gap-4 p-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <User className="w-6 h-6 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-muted-foreground font-medium">Nombre completo</p>
-                    <p className="text-foreground font-semibold">
-                      {profileData && (
-                        <>
-                          {profileData.firstName} {profileData.lastName}
-                        </>
-                      )}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+          <>
+            {/* Tarjetas de información */}
+            <Card className="border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="flex items-start gap-4 p-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <User className="w-6 h-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-muted-foreground font-medium">Nombre completo</p>
+                  <p className="text-foreground font-semibold">
+                    {profileData && (
+                      <>
+                        {profileData.firstName} {profileData.lastName}
+                      </>
+                    )}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
 
-              <Card className="border shadow-sm hover:shadow-md transition-shadow">
-                <CardContent className="flex items-start gap-4 p-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-6 h-6 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-muted-foreground font-medium">Correo electrónico</p>
-                    <p className="text-foreground font-semibold">
-                      {profileData && profileData.email}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+            <Card className="border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="flex items-start gap-4 p-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Mail className="w-6 h-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-muted-foreground font-medium">Correo electrónico</p>
+                  <p className="text-foreground font-semibold">
+                    {profileData && profileData.email}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
 
-              <Card className="border shadow-sm hover:shadow-md transition-shadow">
-                <CardContent className="flex items-start gap-4 p-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Calendar className="w-6 h-6 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-muted-foreground font-medium">Edad</p>
-                    <p className="text-foreground font-semibold">
-                      {profileData && profileData.age + " años"}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+            <Card className="border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="flex items-start gap-4 p-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Calendar className="w-6 h-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-muted-foreground font-medium">Edad</p>
+                  <p className="text-foreground font-semibold">
+                    {profileData && profileData.age + " años"}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
 
-              {/* Botón de acción */}
-              <div className="mt-6">
-                <Button onClick={() => navigate('/configuracion')} className="w-full" size="lg">
-                  Editar Perfil
-                </Button>
-              </div>
-            </>
+            {/* Botón de acción */}
+            <div className="mt-6">
+              <Button onClick={() => navigate('/configuracion')} className="w-full" size="lg">
+                Editar Perfil
+              </Button>
+            </div>
+          </>
         </CardContent>
       </Card>
     </div>
