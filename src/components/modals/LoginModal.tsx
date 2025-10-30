@@ -44,15 +44,6 @@ const loginSchema = z.object({
 })
 
 /**
- * Type inference from Zod schema for form values.
- * 
- * @typedef {Object} LoginFormValues
- * @property {string} username - User's email address
- * @property {string} password - User's password
- */
-type LoginFormValues = z.infer<typeof loginSchema>;
-
-/**
  * Interface for React Router location state.
  * Used to preserve the background location when modal is opened.
  * 
