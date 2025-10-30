@@ -114,14 +114,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   /**
    * Stores the auth token and updates login state.
-<<<<<<< HEAD
-   * @param token - The JWT or session token to store.
-   */
-  const authLogin = (token: string) => {
-=======
    */
   const authLogin = () => {
->>>>>>> origin/Develop
     setIsLoggedIn(true)
   }
 
