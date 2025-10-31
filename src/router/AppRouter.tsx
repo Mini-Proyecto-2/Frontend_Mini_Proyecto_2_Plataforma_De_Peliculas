@@ -28,6 +28,7 @@ import ResetPasswordModal from "../components/modals/ResetPasswordModal";
 import NewPasswordModal from "../components/modals/NewPasswordModal";
 import Settings from "../pages/Settings";
 import Profile from "../pages/Profile";
+import InfoPage from "../pages/InfoPage";
 import VideoPlayer from "../pages/VideoPlayer";
 import { Toaster } from "sonner";
 
@@ -89,6 +90,12 @@ function AppRoutes() {
           {/* VideoPlayer - ruta fuera del MainLayout para pantalla completa */}
           <Route path="/video-player" element={<VideoPlayer />} />
         </Route>
+
+        {/* Info Pages */}
+        <Route path="informacion" element={<InfoPage />} />
+        <Route path="sobre-nosotros" element={<InfoPage />} />
+        <Route path="contacto" element={<InfoPage />} />
+        <Route path="ayuda" element={<InfoPage />} />
 
         {/* SiteMap */}
         <Route path="mapa-sitio" element={<SiteMapPage />} />
