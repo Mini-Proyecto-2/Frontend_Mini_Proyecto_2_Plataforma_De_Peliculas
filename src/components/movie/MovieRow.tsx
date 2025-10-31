@@ -93,7 +93,7 @@ const MovieRow = ({ category }: MovieRowProps) => {
           scrollbarWidth: 'none',
           msOverflowStyle: 'none'
         }}>
-        <div className="flex gap-4 w-max">
+        <div className="flex gap-6 w-max">
           {list.map((video: PexelsVideo, index: number) => (
             <div key={index} className="flex-shrink-0">
               <MovieCard

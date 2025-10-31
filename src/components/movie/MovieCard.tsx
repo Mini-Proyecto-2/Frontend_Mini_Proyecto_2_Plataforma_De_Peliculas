@@ -9,7 +9,6 @@ interface MovieCardProps {
   url: string;
   user: {
     name: string;
-    url: string;
   }
 }
 
@@ -31,7 +30,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ id, imageUrl, url, user }) => {
           backgroundPosition: 'center'
         }}>
         <Button 
-          className="absolute bottom-4 right-4 bg-primary/50 hover:bg-primary/70"
+          className="absolute bottom-4 left-4 bg-primary/50 hover:bg-primary/70"
           onClick={handleClickButton}>
           <Play className="h-4 w-4" />Ver Película
         </Button>

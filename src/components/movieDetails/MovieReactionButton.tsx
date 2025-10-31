@@ -8,12 +8,14 @@ import type { Movie } from '@/types/movie';
 
 interface MovieReactionButtonsProps {
   movie: Movie
+  reload?: () => void
 }
 
 export function MovieReactionButtons({ 
   movie, 
+  reload
 }: MovieReactionButtonsProps) {
-  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [isLiked, setIsLiked] = useState<boolean>(Boolean(reload));
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleClick = async () => {
@@ -21,8 +23,14 @@ export function MovieReactionButtons({
     try {
       if (isLiked) {
         await removeFavorite(movie.pexelsId);
+        if (reload) {
+          reload();
+        }
       } else {
         await addFavorite(movie);
+        if (reload) {
+          reload();
+        }
       }
       setIsLiked(!isLiked);
     } catch (error) {
@@ -51,6 +59,7 @@ export function MovieReactionButtons({
       disabled={loading}
       className={cn(
         "w-10 h-10 transition-all hover:bg-primary/80 shadow-lg",
+        Boolean(reload) ? "w-8 h-8 bg-primary/50 hover:bg-primary/70" : ""
       )}
     >
       <Heart 

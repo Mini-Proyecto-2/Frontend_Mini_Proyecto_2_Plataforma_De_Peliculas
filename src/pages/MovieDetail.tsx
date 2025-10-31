@@ -91,7 +91,7 @@ export default function MovieDetail() {
           <Button
             className="bg-primary hover:bg-primary/80 h-10"
             onClick={handleClickButton}>
-            <Play className="h-4 w-4" />Ver Película
+            <Play className="h-4 w-4" />Reproducir
           </Button>
           <MovieReactionButtons
             movie={{
