@@ -1,3 +1,19 @@
+/**
+ * @file Profile.tsx
+ * @description Renders the user's profile page with basic information (full name, email, age)
+ * fetched from the backend. Displays an avatar with the user's initials and a button
+ * to navigate to the settings/edit profile screen.
+ *
+ * @example
+ * ```tsx
+ * import Profile from "@/pages/Profile"
+ * 
+ * export default function ProfileRoute() {
+ *   return <Profile />
+ * }
+ * ```
+ */
+
 import { useEffect, useState } from 'react';
 import { User, Mail, Calendar } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -7,13 +23,31 @@ import { getProfile } from '@/service/profile';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Shape of the profile object returned by the API.
+ */
 interface Profile {
+  /** User first name. */
   firstName: string;
+  /** User last name. */
   lastName: string;
+  /** User email address. */
   email: string;
+  /** User age in years. */
   age: number;
 }
 
+/**
+ * Profile page component.
+ *
+ * - Fetches user data on mount via `getProfile`.
+ * - Shows initials-based avatar (fallback).
+ * - Displays name, email, and age inside UI cards.
+ * - Provides a CTA to navigate to the configuration/edit screen.
+ *
+ * @component
+ * @returns {JSX.Element} The profile view with user details and edit action.
+ */
 export default function Profile() {
   const [profileData, setProfileData] = useState<Profile | null>(null);
   const navigate = useNavigate();
@@ -30,6 +64,13 @@ export default function Profile() {
     fetchData();
   }, []);
 
+  /**
+   * Builds the initials string to be rendered in the avatar fallback.
+   *
+   * @param firstName - User first name.
+   * @param lastName - User last name.
+   * @returns Uppercased initials (e.g., "MT" for "Mauricio Teherán").
+   */
   const getInitials = (firstName: string, lastName: string) => {
     return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };

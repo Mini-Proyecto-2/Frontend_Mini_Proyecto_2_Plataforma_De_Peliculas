@@ -1,3 +1,15 @@
+/**
+ * @file Sheet Component (Drawer/Sidebar)
+ * @description Accessible sliding panel component built on Radix UI Dialog primitives.
+ * Also known as drawer, sliding panel, or side sheet. Slides in from any edge of the screen
+ * with backdrop overlay and smooth animations. Perfect for mobile menus, filters, or forms.
+ * 
+ * Part of shadcn/ui component library.
+ * @see {@link https://ui.shadcn.com/docs/components/sheet shadcn/ui Sheet Documentation}
+ * @see {@link https://www.radix-ui.com/primitives/docs/components/dialog Radix UI Dialog}
+ */
+
+
 "use client"
 
 import * as React from "react"
@@ -6,28 +18,60 @@ import { XIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Root component providing context for all Sheet elements.
+ *
+ * @component
+ * @param props - Radix `Dialog.Root` props.
+ * @returns A container that manages sheet state and accessibility.
+ */
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />
 }
 
+/**
+ * Button or trigger element that opens the sheet.
+ *
+ * @component
+ * @param props - Radix `Dialog.Trigger` props.
+ */
 function SheetTrigger({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Trigger>) {
   return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />
 }
 
+/**
+ * Button that closes the sheet.
+ *
+ * @component
+ * @param props - Radix `Dialog.Close` props.
+ */
 function SheetClose({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Close>) {
   return <SheetPrimitive.Close data-slot="sheet-close" {...props} />
 }
 
+/**
+ * Portal component that renders sheet content outside the DOM hierarchy.
+ *
+ * @component
+ * @param props - Radix `Dialog.Portal` props.
+ */
 function SheetPortal({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Portal>) {
   return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />
 }
 
+/**
+ * Overlay backdrop that dims the background when the sheet is open.
+ *
+ * @component
+ * @param props - Radix `Dialog.Overlay` props.
+ * @param props.className - Optional additional CSS classes.
+ */
 function SheetOverlay({
   className,
   ...props
@@ -44,6 +88,14 @@ function SheetOverlay({
   )
 }
 
+/**
+ * Main content container for the sheet. Handles slide animations and positioning.
+ *
+ * @component
+ * @param props - Radix `Dialog.Content` props with an additional `side` prop.
+ * @param props.side - Determines from which side the sheet appears (`"top"`, `"right"`, `"bottom"`, or `"left"`). Defaults to `"right"`.
+ * @param props.children - Content of the sheet (e.g., header, body, footer).
+ */
 function SheetContent({
   className,
   children,
@@ -81,6 +133,12 @@ function SheetContent({
   )
 }
 
+/**
+ * Header section of the sheet, typically containing the title and description.
+ *
+ * @component
+ * @param props - Standard `div` props.
+ */
 function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -91,6 +149,12 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
+/**
+ * Footer section of the sheet, commonly used for action buttons.
+ *
+ * @component
+ * @param props - Standard `div` props.
+ */
 function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -101,6 +165,12 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
+/**
+ * Title of the sheet, rendered within `SheetHeader`.
+ *
+ * @component
+ * @param props - Radix `Dialog.Title` props.
+ */
 function SheetTitle({
   className,
   ...props
@@ -114,6 +184,12 @@ function SheetTitle({
   )
 }
 
+/**
+ * Description text displayed below the title, used to clarify the sheet’s purpose.
+ *
+ * @component
+ * @param props - Radix `Dialog.Description` props.
+ */
 function SheetDescription({
   className,
   ...props

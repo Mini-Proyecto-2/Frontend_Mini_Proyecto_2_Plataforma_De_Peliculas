@@ -1,9 +1,41 @@
+/**
+ * @file SiteMapPage.tsx
+ * @description Displays a site map (sitemap) of all main sections and pages of the FilmUnity application.
+ * Organized into cards that group related routes such as main pages, user features, community, and information.
+ *
+ * @example
+ * ```tsx
+ * import SiteMapPage from "@/pages/SiteMapPage"
+ *
+ * export default function Route() {
+ *   return <SiteMapPage />
+ * }
+ * ```
+ */
+
 import { Link } from 'react-router-dom';
 import { Film, Home, LogIn, User, Heart, MessageCircle, Settings, HelpCircle, Clapperboard, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+/**
+ * SiteMapPage component.
+ *
+ * @component
+ * @returns {JSX.Element} A responsive sitemap view showing all available sections and navigation links in the app.
+ *
+ * @remarks
+ * - The sitemap is divided into 4 sections: Main Pages, User, Community, and Information.
+ * - Each section includes related links represented with icons and grouped in a card.
+ * - This page enhances accessibility and provides an overview of FilmUnity’s navigation structure.
+ */
 export default function SiteMapPage() {
+  /**
+   * Defines the structure of the sitemap — each section contains:
+   * - a title,
+   * - an icon for the category,
+   * - and a list of navigation links (each with its own icon and path).
+   */
   const sections = [
     {
       title: "Páginas principales",

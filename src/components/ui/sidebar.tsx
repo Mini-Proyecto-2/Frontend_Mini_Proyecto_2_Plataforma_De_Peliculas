@@ -1,3 +1,24 @@
+/**
+ * @file Sidebar Component System
+ * @description Comprehensive, production-ready sidebar/navigation system built on Radix UI.
+ * Features collapsible states, mobile support, keyboard shortcuts, responsive design,
+ * nested menus, tooltips, and extensive customization options.
+ * 
+ * Key Features:
+ * - Desktop: Collapsible (icon mode or hidden)
+ * - Mobile: Sheet/drawer implementation
+ * - Keyboard shortcut: Cmd/Ctrl + B
+ * - Cookie persistence of state
+ * - Multiple variants: sidebar, floating, inset
+ * - Nested sub-menus
+ * - Action buttons & badges
+ * - Loading skeletons
+ * - Tooltips in collapsed mode
+ * 
+ * Part of shadcn/ui component library.
+ * @see {@link https://ui.shadcn.com/docs/components/sidebar shadcn/ui Sidebar Documentation}
+ */
+
 "use client"
 
 import * as React from "react"
@@ -25,25 +46,67 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
+/**
+ * Cookie key used to persist sidebar open/closed state.
+ * @internal
+ */
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
+/**
+ * Cookie max-age in seconds (7 days).
+ * @internal
+ */
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
+/**
+ * Sidebar width on desktop (CSS custom property value).
+ * @internal
+ */
 const SIDEBAR_WIDTH = "24rem"
+/**
+ * Sidebar width on mobile (CSS custom property value).
+ * @internal
+ */
 const SIDEBAR_WIDTH_MOBILE = "18rem"
+/**
+ * Sidebar width when collapsed to icon mode (CSS custom property value).
+ * @internal
+ */
 const SIDEBAR_WIDTH_ICON = "3rem"
+/**
+ * Keyboard shortcut key (with Ctrl/Cmd) to toggle sidebar.
+ * @internal
+ */
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
+/**
+ * Public shape of the Sidebar context for consumers.
+ */
 type SidebarContextProps = {
+  /** Current visual state derived from `open` (`expanded` or `collapsed`). */
   state: "expanded" | "collapsed"
+  /** Whether the desktop sidebar is open. */
   open: boolean
+  /** Setter for desktop open state. Also persists a cookie. */
   setOpen: (open: boolean) => void
+  /** Whether the mobile sheet is open. */
   openMobile: boolean
+  /** Setter for mobile sheet open state. */
   setOpenMobile: (open: boolean) => void
+  /** True when considered mobile viewport (uses `useIsMobile`). */
   isMobile: boolean
+  /** Toggles sidebar (desktop) or sheet (mobile). */
   toggleSidebar: () => void
 }
 
+/**
+ * React context for the sidebar system.
+ * @internal
+ */
 const SidebarContext = React.createContext<SidebarContextProps | null>(null)
 
+/**
+ * Hook to access the current Sidebar context.
+ * @throws If used outside of a `SidebarProvider`.
+ */
 function useSidebar() {
   const context = React.useContext(SidebarContext)
   if (!context) {
@@ -53,11 +116,26 @@ function useSidebar() {
   return context
 }
 
+/**
+ * Provider that manages sidebar state and exposes it via context.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <SidebarProvider>
+ *   <Sidebar>...items...</Sidebar>
+ *   <SidebarInset>...page content...</SidebarInset>
+ * </SidebarProvider>
+ * ```
+ */
 const SidebarProvider = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
+    /** Initial open state when uncontrolled. */
     defaultOpen?: boolean
+    /** Controlled open state for desktop. */
     open?: boolean
+    /** Controlled setter for desktop open state. */
     onOpenChange?: (open: boolean) => void
   }
 >(
@@ -74,10 +152,12 @@ const SidebarProvider = React.forwardRef<
     ref
   ) => {
     const isMobile = useIsMobile()
+    // Uncontrolled desktop open state (can be overridden by controlled prop).
     const [openMobile, setOpenMobile] = React.useState(false)
 
-    // This is the internal state of the sidebar.
-    // We use openProp and setOpenProp for control from outside the component.
+    /**
+     * Updates desktop open state (controlled or uncontrolled) and persists cookie.
+     */
     const [_open, _setOpen] = React.useState(defaultOpen)
     const open = openProp ?? _open
     const setOpen = React.useCallback(
@@ -95,7 +175,9 @@ const SidebarProvider = React.forwardRef<
       [setOpenProp, open]
     )
 
-    // Helper to toggle the sidebar.
+    /**
+     * Toggles mobile sheet or desktop sidebar depending on viewport.
+     */
     const toggleSidebar = React.useCallback(() => {
       return isMobile
         ? setOpenMobile((open) => !open)
@@ -162,6 +244,14 @@ const SidebarProvider = React.forwardRef<
 )
 SidebarProvider.displayName = "SidebarProvider"
 
+/**
+ * Sidebar container. Renders a sheet on mobile and a fixed panel on desktop.
+ *
+ * @component
+ * @param props.side - Which side to attach the sidebar to (left or right). Default `"left"`.
+ * @param props.variant - Visual style: `"sidebar"`, `"floating"`, or `"inset"`. Default `"sidebar"`.
+ * @param props.collapsible - Collapsing behavior: `"offcanvas"`, `"icon"`, or `"none"`. Default `"offcanvas"`.
+ */
 const Sidebar = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
@@ -244,7 +334,7 @@ const Sidebar = React.forwardRef<
         />
         <div
           className={cn(
-            "fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] duration-200 ease-linear md:flex",
+            "fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] duration-200 ease-linear lg:flex",
             side === "left"
               ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
               : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
@@ -269,6 +359,15 @@ const Sidebar = React.forwardRef<
 )
 Sidebar.displayName = "Sidebar"
 
+/**
+ * Button that toggles the sidebar open/closed.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <SidebarTrigger aria-label="Toggle sidebar" />
+ * ```
+ */
 const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
@@ -295,6 +394,11 @@ const SidebarTrigger = React.forwardRef<
 })
 SidebarTrigger.displayName = "SidebarTrigger"
 
+/**
+ * Narrow interactive rail along the sidebar edge to toggle state via pointer.
+ *
+ * @component
+ */
 const SidebarRail = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<"button">
@@ -324,6 +428,11 @@ const SidebarRail = React.forwardRef<
 })
 SidebarRail.displayName = "SidebarRail"
 
+/**
+ * Main page content container that visually insets when the sidebar uses `inset` variant.
+ *
+ * @component
+ */
 const SidebarInset = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"main">
@@ -342,6 +451,11 @@ const SidebarInset = React.forwardRef<
 })
 SidebarInset.displayName = "SidebarInset"
 
+/**
+ * Input styled for use within the sidebar header or content.
+ *
+ * @component
+ */
 const SidebarInput = React.forwardRef<
   React.ElementRef<typeof Input>,
   React.ComponentProps<typeof Input>
@@ -360,6 +474,10 @@ const SidebarInput = React.forwardRef<
 })
 SidebarInput.displayName = "SidebarInput"
 
+/**
+ * Structural header area inside the sidebar.
+ * @component
+ */
 const SidebarHeader = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">
@@ -375,6 +493,10 @@ const SidebarHeader = React.forwardRef<
 })
 SidebarHeader.displayName = "SidebarHeader"
 
+/**
+ * Structural footer area inside the sidebar.
+ * @component
+ */
 const SidebarFooter = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">
@@ -390,6 +512,10 @@ const SidebarFooter = React.forwardRef<
 })
 SidebarFooter.displayName = "SidebarFooter"
 
+/**
+ * Visual separator adjusted to sidebar palette and spacing.
+ * @component
+ */
 const SidebarSeparator = React.forwardRef<
   React.ElementRef<typeof Separator>,
   React.ComponentProps<typeof Separator>
@@ -405,6 +531,10 @@ const SidebarSeparator = React.forwardRef<
 })
 SidebarSeparator.displayName = "SidebarSeparator"
 
+/**
+ * Scrollable content container for arbitrary sidebar sections.
+ * @component
+ */
 const SidebarContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">
@@ -423,6 +553,10 @@ const SidebarContent = React.forwardRef<
 })
 SidebarContent.displayName = "SidebarContent"
 
+/**
+ * Group wrapper that provides spacing and relative positioning.
+ * @component
+ */
 const SidebarGroup = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">
@@ -438,6 +572,12 @@ const SidebarGroup = React.forwardRef<
 })
 SidebarGroup.displayName = "SidebarGroup"
 
+/**
+ * Group label that can optionally render as child with `Slot`.
+ *
+ * @component
+ * @param props.asChild - When true, render as the passed child component/tag.
+ */
 const SidebarGroupLabel = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & { asChild?: boolean }
@@ -459,6 +599,12 @@ const SidebarGroupLabel = React.forwardRef<
 })
 SidebarGroupLabel.displayName = "SidebarGroupLabel"
 
+/**
+ * Optional action button positioned in the top-right of a group.
+ *
+ * @component
+ * @param props.asChild - When true, render as the passed child component/tag.
+ */
 const SidebarGroupAction = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<"button"> & { asChild?: boolean }
@@ -482,6 +628,10 @@ const SidebarGroupAction = React.forwardRef<
 })
 SidebarGroupAction.displayName = "SidebarGroupAction"
 
+/**
+ * Simple content wrapper for group body.
+ * @component
+ */
 const SidebarGroupContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">
@@ -495,6 +645,10 @@ const SidebarGroupContent = React.forwardRef<
 ))
 SidebarGroupContent.displayName = "SidebarGroupContent"
 
+/**
+ * Unordered list container for sidebar navigation/menu items.
+ * @component
+ */
 const SidebarMenu = React.forwardRef<
   HTMLUListElement,
   React.ComponentProps<"ul">
@@ -508,6 +662,10 @@ const SidebarMenu = React.forwardRef<
 ))
 SidebarMenu.displayName = "SidebarMenu"
 
+/**
+ * List item wrapper for a single menu entry.
+ * @component
+ */
 const SidebarMenuItem = React.forwardRef<
   HTMLLIElement,
   React.ComponentProps<"li">
@@ -521,6 +679,10 @@ const SidebarMenuItem = React.forwardRef<
 ))
 SidebarMenuItem.displayName = "SidebarMenuItem"
 
+/**
+ * Variants for menu buttons using class-variance-authority.
+ * @internal
+ */
 const sidebarMenuButtonVariants = cva(
   "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
   {
@@ -543,6 +705,16 @@ const sidebarMenuButtonVariants = cva(
   }
 )
 
+/**
+ * Primary button used inside a `SidebarMenuItem`. Supports tooltip on collapsed state.
+ *
+ * @component
+ * @param props.asChild - Render the button as a child component via `Slot`.
+ * @param props.isActive - Marks the item as active (applies accent styles).
+ * @param props.tooltip - Tooltip content or string (only shown when collapsed on desktop).
+ * @param props.variant - Visual variant from `sidebarMenuButtonVariants`.
+ * @param props.size - Size variant from `sidebarMenuButtonVariants`.
+ */
 const SidebarMenuButton = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<"button"> & {
@@ -602,6 +774,14 @@ const SidebarMenuButton = React.forwardRef<
 )
 SidebarMenuButton.displayName = "SidebarMenuButton"
 
+/**
+ * Optional trailing action (icon button) inside a menu item.
+ * Can be shown only on hover via `showOnHover`.
+ *
+ * @component
+ * @param props.asChild - Render as child via `Slot`.
+ * @param props.showOnHover - When true, reveals the action on hover/focus.
+ */
 const SidebarMenuAction = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<"button"> & {
@@ -633,6 +813,10 @@ const SidebarMenuAction = React.forwardRef<
 })
 SidebarMenuAction.displayName = "SidebarMenuAction"
 
+/**
+ * Non-interactive badge aligned to the right edge of a menu item (e.g., counters).
+ * @component
+ */
 const SidebarMenuBadge = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">
@@ -654,6 +838,12 @@ const SidebarMenuBadge = React.forwardRef<
 ))
 SidebarMenuBadge.displayName = "SidebarMenuBadge"
 
+/**
+ * Skeleton row for menu loading states. Optionally shows a square icon placeholder.
+ *
+ * @component
+ * @param props.showIcon - Whether to render the icon placeholder.
+ */
 const SidebarMenuSkeleton = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
@@ -692,6 +882,10 @@ const SidebarMenuSkeleton = React.forwardRef<
 })
 SidebarMenuSkeleton.displayName = "SidebarMenuSkeleton"
 
+/**
+ * Nested list container for sub-navigation entries.
+ * @component
+ */
 const SidebarMenuSub = React.forwardRef<
   HTMLUListElement,
   React.ComponentProps<"ul">
@@ -709,12 +903,24 @@ const SidebarMenuSub = React.forwardRef<
 ))
 SidebarMenuSub.displayName = "SidebarMenuSub"
 
+/**
+ * Simple wrapper for a sub-menu list item.
+ * @component
+ */
 const SidebarMenuSubItem = React.forwardRef<
   HTMLLIElement,
   React.ComponentProps<"li">
 >(({ ...props }, ref) => <li ref={ref} {...props} />)
 SidebarMenuSubItem.displayName = "SidebarMenuSubItem"
 
+/**
+ * Link-like button for sub-menu entries. Supports sizes and active styling.
+ *
+ * @component
+ * @param props.asChild - Render as child via `Slot` (e.g., Next.js `Link`).
+ * @param props.size - Visual size (`"sm"` | `"md"`). Default `"md"`.
+ * @param props.isActive - Mark as active (accent styles).
+ */
 const SidebarMenuSubButton = React.forwardRef<
   HTMLAnchorElement,
   React.ComponentProps<"a"> & {

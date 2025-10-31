@@ -4,6 +4,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Ocultar scrollbar en todos los navegadores */
+* {
+  
+  -ms-overflow-style: none; /* IE y Edge */
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
