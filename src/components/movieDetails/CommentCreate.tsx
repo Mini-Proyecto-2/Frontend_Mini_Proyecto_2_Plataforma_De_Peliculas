@@ -21,14 +21,14 @@ interface CommentCreateProps {
 }
 
 // Schema de validación
-const commentSchema = z.object({
+export const commentSchema = z.object({
   comment: z
     .string()
     .min(1, "El comentario no puede estar vacío")
     .max(100, "El comentario debe tener máximo 100 caracteres"),
 });
 
-type CommentFormValues = z.infer<typeof commentSchema>;
+export type CommentFormValues = z.infer<typeof commentSchema>;
 
 const CommentCreate: React.FC<CommentCreateProps> = ({ id, reload }) => {
   const [isSending, setIsSending] = useState(false);
@@ -86,7 +86,6 @@ const CommentCreate: React.FC<CommentCreateProps> = ({ id, reload }) => {
             </FormItem>
           )}
         />
-
       </form>
     </Form>
   );

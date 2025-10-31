@@ -10,6 +10,10 @@ export const getCommentsByMovie = async (movieId: number) => {
     return request(`comments/movie/${movieId}`, "GET");
 };
 
+export const editComment = async (commentId: string, description: string) => {
+    return request(`comments/${commentId}`, "PUT", { description });
+};
+
 export const deleteComment = async (commentId: string) => {
     return request(`comments/${commentId}`, "DELETE");
 };

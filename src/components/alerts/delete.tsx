@@ -39,7 +39,7 @@ export const DeleteAlert = ({ title, description, onConfirm }: DeleteAlertProps)
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-destructive">{title}</AlertDialogTitle>
+          <AlertDialogTitle className="text-destructive flex items-center gap-2"><Trash2 />{title}</AlertDialogTitle>
           <AlertDialogDescription className="text-destructive">{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="gap-2">

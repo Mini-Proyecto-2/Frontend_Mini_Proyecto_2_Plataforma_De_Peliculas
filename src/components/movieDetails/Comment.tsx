@@ -1,10 +1,9 @@
 import React from 'react';
-import { Pencil } from 'lucide-react';
 import { getGradientFromString, getInitials } from '@/lib/avatar';
-import { Button } from '../ui/button';
 import { toast } from 'sonner';
-import { deleteComment } from '@/service/comments';
+import { deleteComment, editComment } from '@/service/comments';
 import { DeleteAlert } from '../alerts/delete';
+import { EditAlert } from '../alerts/edit';
 
 interface CommentProps {
   author: {
@@ -27,6 +26,17 @@ const Comment: React.FC<CommentProps> = ({ author, text, createdAt, id, reload }
       toast.success("Comentario eliminado");
     } catch (error) {
       toast.error("Error al eliminar el comentario");
+    }
+  };
+
+  const handleEditComment = async (newText: string) => {
+    if (!id) return;
+    try {
+      await editComment(id, newText);
+      reload();
+      toast.success("Comentario editado");
+    } catch (error) {
+      toast.error("Error al editar el comentario");
     }
   };
 
@@ -56,22 +66,18 @@ const Comment: React.FC<CommentProps> = ({ author, text, createdAt, id, reload }
       {/* Contenido */}
       <div className="flex gap-2 items-start">
         {id && (
-          <Button
-            onClick={() => console.log("Editando: ", id)}
-            variant="ghost"
-            size="icon"
-            className="p-1.5 hover:bg-neutral-800 rounded transition-colors text-neutral-400 hover:text-white"
-            aria-label="Editar comentario"
-          >
-            <Pencil size={16} />
-          </Button>
-        )}
-        {id && (
-          <DeleteAlert
-            title="Eliminar comentario"
-            description="¿Estás seguro de eliminar este comentario?"
-            onConfirm={() => handleDeleteComment()}
-          />
+          <>
+            <EditAlert
+              title="Editar comentario"
+              description={text}
+              onConfirm={(newText: string) => handleEditComment(newText)}
+            />
+            <DeleteAlert
+              title="Eliminar comentario"
+              description="¿Estás seguro de eliminar este comentario?"
+              onConfirm={() => handleDeleteComment()}
+            />
+          </>
         )}
       </div>
     </div>
