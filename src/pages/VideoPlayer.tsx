@@ -83,6 +83,19 @@ export default function VideoPlayer() {
     navigate(-1);
   };
 
+
+  /**
+   * Maneja el evento de teclado para hacer back cuando se presiona escape.
+   * @param event - Evento de teclado.
+   */
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      handleGoBack();
+    }
+  };
+
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-black">
@@ -113,6 +126,7 @@ export default function VideoPlayer() {
       className="relative h-screen w-screen bg-black overflow-hidden"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onKeyDown={handleKeyDown}
       style={{ cursor: showControls ? 'default' : 'none' }}
     >
       {/* Reproductor de video */}
@@ -153,8 +167,8 @@ export default function VideoPlayer() {
             }`}
         >
           <section className="text-end px-4 py-2 bg-primary/20 backdrop-blur-md rounded-bl-lg">
-            <p className="text-sm">{video.user.name}</p>
-            <p className="text-lg font-bold">{extractTitleFromUrl(video.url)}</p>
+            <p className="text-xl font-bold">{extractTitleFromUrl(video.url)}</p>
+            <p className="text-md">{video.user.name}</p>
           </section>
         </div>
       </div>

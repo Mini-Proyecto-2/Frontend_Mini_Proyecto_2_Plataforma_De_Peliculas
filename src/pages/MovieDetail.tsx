@@ -5,10 +5,12 @@ import { getPexelsById } from "../service/pexels";
 import { extractTitleFromUrl } from "../lib/movie";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon, Play } from "lucide-react";
-import { MovieReactionButtons } from "@/components/movieDetails/MovieReactionButton";
 import { Button } from "@/components/ui/button";
 import RatingStarts from "@/components/movieDetails/RatingStarts";
-import { Comment } from "@/components/movieDetails/Comment";
+import { FavoriteButton } from "@/components/movieDetails/FavoriteButton";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
+import { CommentSection } from "@/components/movieDetails/CommentSection";
 
 export default function MovieDetail() {
   const { id } = useParams();
@@ -62,27 +64,27 @@ export default function MovieDetail() {
 
   if (!movie) {
     return (
-      <div
-        className="flex justify-between items-end bg-gradient-to-t from-primary via-transparent h-[60dvh] max-h-[1200px] p-6"
-        style={{
-          background: "linear-gradient(90deg, #2a2a2a 0%, #3a3a3a 50%, #2a2a2a 100%)",
-          animation: "shimmer 3s ease-in-out infinite",
-        }} />
+      <>
+        <Skeleton className="h-[60dvh] max-h-[1200px] rounded-none" />
+        <div className="p-12">
+          <Spinner className="size-16 mx-auto" />
+        </div>
+      </>
     )
   }
 
   return (
     <div>
       <div
-        className="flex justify-between items-end bg-gradient-to-t from-primary via-transparent h-[60dvh] max-h-[1200px] p-8"
+        className="sticky-none lg:sticky -top-[calc(60dvh-100px)] flex flex-col lg:flex-row justify-between items-end gap-16 bg-gradient-to-t from-primary via-transparent h-[60dvh] max-h-[1200px] p-8"
         style={{
 
           background: `linear-gradient(transparent 0%, #242f3b67 75%, #242f3b 100%), url(${movie.image})`, backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}>
-        <section>
-          <p className="font-bold text-[2.2rem]">{title}</p>
+        <section className="flex flex-col lg:self-end self-start">
+          <p className="font-bold text-2xl">{window.innerWidth >= 1240 ? title : window.innerWidth < 1024 ? title : title.slice(0, 30) + "..."}</p>
           <p className="text-gray-300 text-md">
             {movie?.user.name}
           </p>
@@ -93,7 +95,7 @@ export default function MovieDetail() {
             onClick={handleClickButton}>
             <Play className="h-4 w-4" />Reproducir
           </Button>
-          <MovieReactionButtons
+          <FavoriteButton
             movie={{
               title: title,
               pexelUser: movie.user.name,
@@ -105,17 +107,8 @@ export default function MovieDetail() {
       </div>
 
       <div className="p-8 space-y-4">
-        <RatingStarts id={movie.id} rating={14} />
-        <h3 className="font-bold text-2xl">Comentarios</h3>
-        <section className="flex flex-col gap-4">
-          <Comment author={{ firstName: "Mauricio", lastName: "Teherán" }} text="Excelente película" />
-          <Comment author={{ firstName: "Felipe", lastName: "Lopez" }} text="Muy buena película" />
-          <Comment author={{ firstName: "Daniela", lastName: "Garcia" }} text="Realmente emocionante" />
-          <Comment author={{ firstName: "Estefania", lastName: "Rodriguez" }} text="Increible película, despierta todo lo que uno quiere como aficionado" />
-          <Comment author={{ firstName: "Juan", lastName: "Perez" }} text="Excelente historia" />
-          <Comment author={{ firstName: "Maria", lastName: "Gomez" }} text="Me encanto la actuación" />
-          
-        </section>
+        <RatingStarts id={movie.id} />
+        <CommentSection id={movie.id} />
       </div>
     </div>
   );

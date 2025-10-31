@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '../ui/button';
 import { Play } from 'lucide-react';
-import { MovieReactionButtons } from '../movieDetails/MovieReactionButton';
+import { FavoriteButton } from '../movieDetails/FavoriteButton';
 
 interface FavoriteMovieCardProps {
   pexelsId: string;
@@ -32,7 +32,7 @@ const FavoriteMovieCard: React.FC<FavoriteMovieCardProps> = ({ pexelsId, miniatu
           <Play className="h-4 w-4" />Ver Película
         </Button>
         <section className="absolute top-4 right-4">
-          <MovieReactionButtons movie={{ pexelsId, miniatureUrl, title, pexelUser }} reload={() => reload()} />
+          <FavoriteButton movie={{ pexelsId, miniatureUrl, title, pexelUser }} reload={() => reload()} />
         </section>
       </div>
 

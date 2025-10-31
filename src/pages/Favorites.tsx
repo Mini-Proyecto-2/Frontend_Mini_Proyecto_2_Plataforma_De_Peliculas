@@ -26,14 +26,14 @@ export default function Favorites() {
   }, [reload]);
 
   return (
-    <div className="container w-full p-8">
-      <h1 className="font-bold">Favoritos</h1>
+    <div className="w-full p-8">
+      <h1 className="font-bold mb-6">Favoritos</h1>
       {loading ? (
         <Spinner className="size-[3rem] text-white my-8 mx-auto" />
       ) : favorites.length === 0 ? (
         <p className="text-white">No hay favoritos</p>
       ) : (
-        <div className="flex flex-wrap gap-6 mt-6 xs:justify-center justify-start">
+        <div className="flex flex-wrap gap-8 lg:justify-start justify-evenly">
           {favorites.map((movie) => (
             <FavoriteMovieCard key={movie.pexelsId} {...movie} reload={() => setReload(!reload)} />
           ))}
