@@ -13,37 +13,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-
-type VideoFile = {
-  id: number;
-  quality: string;
-  file_type: string;
-  width: number | null;
-  height: number | null;
-  link: string;
-}
-
-type VideoPicture = {
-  id: number;
-  picture: string;
-  nr: number;
-}
-
-type Video = {
-  id: number;
-  width: number;
-  height: number;
-  url: string;
-  duration: number;
-  image: string;
-  video_files: VideoFile[];
-  video_pictures?: VideoPicture[];
-  user: {
-    id: number;
-    name: string;
-    url: string;
-  };
-}
+import type { PexelsVideo } from "@/types/pexels";
+import { extractTitleFromUrl } from "@/lib/movie";
 
 /**
  * Componente de página de reproductor de video.
@@ -52,7 +23,7 @@ type Video = {
  * @returns {JSX.Element} Vista de reproductor de video con controles y navegación.
  */
 export default function VideoPlayer() {
-  const [video, setVideo] = useState<Video | null>(null);
+  const [video, setVideo] = useState<PexelsVideo | null>(null);
   const [loading, setLoading] = useState(true);
   const [showControls, setShowControls] = useState(true);
   const navigate = useNavigate();
@@ -61,8 +32,8 @@ export default function VideoPlayer() {
 
   useEffect(() => {
     // Obtener el video desde el state de navegación
-    const videoFromState = location.state?.video as Video | undefined;
-    
+    const videoFromState = location.state?.video as PexelsVideo | undefined;
+
     if (videoFromState) {
       setVideo(videoFromState);
       setLoading(false);
@@ -86,12 +57,12 @@ export default function VideoPlayer() {
    */
   const handleMouseMove = () => {
     setShowControls(true);
-    
+
     // Limpiar timeout anterior
     if (hideControlsTimeoutRef.current) {
       clearTimeout(hideControlsTimeoutRef.current);
     }
-    
+
     // Ocultar controles después de 3 segundos de inactividad
     hideControlsTimeoutRef.current = window.setTimeout(() => {
       setShowControls(false);
@@ -138,7 +109,7 @@ export default function VideoPlayer() {
   }
 
   return (
-    <div 
+    <div
       className="relative h-screen w-screen bg-black overflow-hidden"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -169,41 +140,22 @@ export default function VideoPlayer() {
           onClick={handleGoBack}
           variant="ghost"
           size="icon"
-          className={`absolute top-4 left-4 z-50 p-3 hover:bg-gray-800/60 rounded-full hover:backdrop-blur-md transition-all duration-300 pointer-events-auto ${
-            showControls ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
-          }`}
+          className={`absolute top-4 left-4 z-50 hover:bg-gray-800/60 rounded-lg hover:backdrop-blur-md transition-all duration-300 pointer-events-auto ${showControls ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
+            }`}
           aria-label="Volver"
         >
-          <ArrowLeft className="w-6 h-6 text-white" />
+          <ArrowLeft className="text-white" />
         </Button>
 
         {/* Título de la vista - con transición suave */}
-        <div 
-          className={`absolute top-4 left-1/2 transform -translate-x-1/2 z-40 transition-all duration-300 ${
-            showControls ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
-          }`}
+        <div
+          className={`absolute top-4 right-4 z-40 transition-all duration-300 ${showControls ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+            }`}
         >
-          <h1 className="text-white text-lg font-semibold bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">
-            Vista Pantalla Completa
-          </h1>
-        </div>
-
-        {/* Información del video - con transición suave */}
-        <div 
-          className={`absolute bottom-20 left-4 right-4 z-40 flex justify-between items-end transition-all duration-300 ${
-            showControls ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
-        >
-          <div className="bg-black/50 backdrop-blur-sm rounded-lg p-4 max-w-md">
-            <p className="text-white text-sm">
-              Duración: {Math.floor(video.duration / 60)}:{(video.duration % 60).toString().padStart(2, '0')} min
-            </p>
-            {video.user && (
-              <p className="text-white/70 text-xs mt-1">
-                Por: {video.user.name}
-              </p>
-            )}
-          </div>
+          <section className="text-end px-4 py-2 bg-primary/20 backdrop-blur-md rounded-bl-lg">
+            <p className="text-sm">{video.user.name}</p>
+            <p className="text-lg font-bold">{extractTitleFromUrl(video.url)}</p>
+          </section>
         </div>
       </div>
     </div>
