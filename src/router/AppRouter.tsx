@@ -94,8 +94,6 @@ function AppRoutes(): JSX.Element {
 
         {/* Info Pages */}
         <Route path="sobre-nosotros" element={<InfoPage />} />
-        <Route path="contacto" element={<InfoPage />} />
-        <Route path="ayuda" element={<InfoPage />} />
 
         {/* SiteMap */}
         <Route path="mapa-sitio" element={<SiteMapPage />} />

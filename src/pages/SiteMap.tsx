@@ -65,9 +65,9 @@ export default function SiteMapPage(): JSX.Element {
       title: "Información",
       icon: HelpCircle,
       links: [
-        { name: "Sobre nosotros", path: "/sobre-nosotros", icon: HelpCircle, auth: 'both' },
-        { name: "Contacto", path: "/contacto", icon: MessageCircle, auth: 'both' },
-        { name: "Ayuda", path: "/ayuda", icon: HelpCircle, auth: 'both' },
+        { name: "Sobre nosotros", path: "/sobre-nosotros#about", icon: HelpCircle, auth: 'both' },
+        { name: "Contacto", path: "/sobre-nosotros#contact", icon: MessageCircle, auth: 'both' },
+        { name: "Ayuda", path: "/sobre-nosotros#help", icon: HelpCircle, auth: 'both' },
       ]
     }
   ];
