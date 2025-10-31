@@ -49,20 +49,17 @@ export const CommentSection = ({ id }: CommentSectionProps) => {
       <section className="flex flex-col gap-4 lg:-mt-12 mt-0">
         {loading ? (
           <>
-            <Skeleton className="h-20" />
-            <Skeleton className="h-20" />
-            <Skeleton className="h-20" />
-            <Skeleton className="h-20" />
-            <Skeleton className="h-20" />
-            <Skeleton className="h-20" />
+            {[...Array(7)].map((_, index) => (
+              <Skeleton key={index} className="h-20" />
+            ))}
           </>
         ) : (
           <>
             {userComments.map((comment) => (
-              <Comment key={comment._id} author={comment.userId} text={comment.description} id={comment._id} />
+              <Comment key={comment._id} author={comment.userId} text={comment.description} id={comment._id} createdAt={comment.createdAt} reload={() => setReload(!reload)} />
             ))}
             {otherComments.map((comment) => (
-              <Comment key={comment._id} author={comment.userId} text={comment.description} />
+              <Comment key={comment._id} author={comment.userId} text={comment.description} createdAt={comment.createdAt} reload={() => setReload(!reload)} />
             ))}
           </>)}
       </section>

@@ -9,3 +9,8 @@ export const createComment = async (description: string, moviePexelsId: number) 
 export const getCommentsByMovie = async (movieId: number) => {
     return request(`comments/movie/${movieId}`, "GET");
 };
+
+export const deleteComment = async (commentId: string) => {
+    return request(`comments/${commentId}`, "DELETE");
+};
+
