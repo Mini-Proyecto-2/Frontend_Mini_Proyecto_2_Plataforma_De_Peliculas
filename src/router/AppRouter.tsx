@@ -31,6 +31,7 @@ import Profile from "../pages/Profile";
 import InfoPage from "../pages/InfoPage";
 import VideoPlayer from "../pages/VideoPlayer";
 import { Toaster } from "sonner";
+import type { JSX } from "react";
 
 /**
  * AppRoutes component.
@@ -55,7 +56,7 @@ import { Toaster } from "sonner";
  * }
  * ```
  */
-function AppRoutes() {
+function AppRoutes(): JSX.Element {
   // Current route location, possibly containing a `background` entry when navigating to modal routes.
   const location = useLocation();
 
