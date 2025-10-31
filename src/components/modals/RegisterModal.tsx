@@ -189,7 +189,8 @@ export default function RegisterModal() {
    * @returns {void}
    */
   const handleClose = () => {
-    if (!loading) navigate("/descubre");
+    if (background && !loading) navigate(background.pathname);
+    else navigate("/descubre");
   };
 
     /**

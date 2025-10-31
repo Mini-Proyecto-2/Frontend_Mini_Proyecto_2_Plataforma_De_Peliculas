@@ -89,11 +89,10 @@ function AppRoutes(): JSX.Element {
             <Route path="/pelicula/:id" element={<MovieDetail />} />
           </Route>
           {/* VideoPlayer - ruta fuera del MainLayout para pantalla completa */}
-          <Route path="/video-player" element={<VideoPlayer />} />
+          <Route path="/video-player/" element={<VideoPlayer />} />
         </Route>
 
         {/* Info Pages */}
-        <Route path="informacion" element={<InfoPage />} />
         <Route path="sobre-nosotros" element={<InfoPage />} />
         <Route path="contacto" element={<InfoPage />} />
         <Route path="ayuda" element={<InfoPage />} />

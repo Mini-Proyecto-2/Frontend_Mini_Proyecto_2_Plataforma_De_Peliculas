@@ -137,7 +137,8 @@ export default function ResetPasswordModal() {
    * @returns {void}
    */
   const handleClose = () => {
-    if (!loading) navigate("/descubre");
+    if (location.state.background && !loading) navigate(location.state.background.pathname);
+    else navigate("/descubre");
   };
 
   /**

@@ -13,10 +13,12 @@
  * ```
  */
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Film, Home, LogIn, User, Heart, MessageCircle, Settings, HelpCircle, Clapperboard, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAuth } from '@/context/AuthContext';
+import type { JSX } from 'react';
 
 /**
  * SiteMapPage component.
@@ -29,7 +31,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
  * - Each section includes related links represented with icons and grouped in a card.
  * - This page enhances accessibility and provides an overview of FilmUnity’s navigation structure.
  */
-export default function SiteMapPage() {
+export default function SiteMapPage(): JSX.Element {
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   /**
    * Defines the structure of the sitemap — each section contains:
    * - a title,
@@ -41,36 +46,28 @@ export default function SiteMapPage() {
       title: "Páginas principales",
       icon: Home,
       links: [
-        { name: "Inicio", path: "/descubre", icon: Home },
-        { name: "Catálogo de películas", path: "/peliculas", icon: Film },
-        { name: "Mis favoritos", path: "/favoritos", icon: Heart },
+        { name: "Inicio", path: "/", icon: Home, auth: 'both' },
+        { name: "Catálogo de películas", path: "/", icon: Film, auth: 'user' },
+        { name: "Mis favoritos", path: "/favoritos", icon: Heart, auth: 'user' },
       ]
     },
     {
       title: "Usuario",
       icon: User,
       links: [
-        { name: "Iniciar sesión", path: "/iniciar-sesion", icon: LogIn },
-        { name: "Registrarse", path: "/registrarse", icon: UserPlus },
-        { name: "Mi perfil", path: "/perfil", icon: User },
-        { name: "Configuración", path: "/configuracion", icon: Settings },
-      ]
-    },
-    {
-      title: "Comunidad",
-      icon: MessageCircle,
-      links: [
-        { name: "Comentarios", path: "/comentarios", icon: MessageCircle },
-        { name: "Valoraciones", path: "/valoraciones", icon: Heart },
+        { name: "Iniciar sesión", path: "/iniciar-sesion", icon: LogIn, auth: 'all' },
+        { name: "Registrarse", path: "/registrarse", icon: UserPlus, auth: 'all' },
+        { name: "Mi perfil", path: "/perfil", icon: User, auth: 'user' },
+        { name: "Configuración", path: "/configuracion", icon: Settings, auth: 'user' },
       ]
     },
     {
       title: "Información",
       icon: HelpCircle,
       links: [
-        { name: "Sobre nosotros", path: "/sobre-nosotros", icon: HelpCircle },
-        { name: "Ayuda", path: "/ayuda", icon: HelpCircle },
-        { name: "Contacto", path: "/contacto", icon: MessageCircle },
+        { name: "Sobre nosotros", path: "/sobre-nosotros", icon: HelpCircle, auth: 'both' },
+        { name: "Contacto", path: "/contacto", icon: MessageCircle, auth: 'both' },
+        { name: "Ayuda", path: "/ayuda", icon: HelpCircle, auth: 'both' },
       ]
     }
   ];
@@ -105,7 +102,7 @@ export default function SiteMapPage() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-3 gap-6">
           {sections.map((section) => {
             const Icon = section.icon;
             return (
@@ -118,19 +115,33 @@ export default function SiteMapPage() {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-3">
-                    {section.links.map((link) => {
+                    {section.links.filter((link) => (link.auth === 'both' || (link.auth === 'user' && isLoggedIn) || (link.auth === 'all' && !isLoggedIn))).map((link) => {
                       const LinkIcon = link.icon;
-                      return (
-                        <li key={link.path}>
-                          <Link
-                            to={link.path}
-                            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
-                          >
-                            <LinkIcon className="h-4 w-4" />
-                            {link.name}
-                          </Link>
-                        </li>
-                      );
+                      if (['both', 'user'].includes(link.auth)) {
+                        return (
+                          <li key={link.path}>
+                            <Link
+                              to={link.path}
+                              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+                            >
+                              <LinkIcon className="h-4 w-4" />
+                              {link.name}
+                            </Link>
+                          </li>
+                        );
+                      } else {
+                        return (
+                          <li key={link.path}>
+                            <p
+                              onClick={() => navigate(link.path, { state: { background: location } })}
+                              className="text-white hover:cursor-pointer hover:underline flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+                            >
+                              <LinkIcon className="h-4 w-4" />
+                              {link.name}
+                            </p>
+                          </li>
+                        )
+                      }
                     })}
                   </ul>
                 </CardContent>
