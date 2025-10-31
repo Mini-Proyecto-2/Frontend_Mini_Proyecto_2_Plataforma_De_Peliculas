@@ -28,6 +28,7 @@ import ResetPasswordModal from "../components/modals/ResetPasswordModal";
 import NewPasswordModal from "../components/modals/NewPasswordModal";
 import Settings from "../pages/Settings";
 import Profile from "../pages/Profile";
+import InfoPage from "../pages/InfoPage";
 
 import { Toaster } from "sonner";
 
@@ -87,6 +88,12 @@ function AppRoutes() {
             <Route path="/pelicula/:id" element={<MovieDetail />} />
           </Route>
         </Route>
+
+        {/* Info Pages */}
+        <Route path="informacion" element={<InfoPage />} />
+        <Route path="sobre-nosotros" element={<InfoPage />} />
+        <Route path="contacto" element={<InfoPage />} />
+        <Route path="ayuda" element={<InfoPage />} />
 
         {/* SiteMap */}
         <Route path="mapa-sitio" element={<SiteMapPage />} />
