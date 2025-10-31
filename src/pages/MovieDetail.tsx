@@ -48,7 +48,7 @@ export default function MovieDetail() {
           <AlertCircleIcon />
           <AlertTitle>Error cargando la película</AlertTitle>
           <AlertDescription>
-            <p>Por favor, verifica la información de la película y vuelve a intentarlo.</p>
+            <p>Por favor, verificar la información de la película y vuelve a intentarlo.</p>
             <ul className="list-inside list-disc text-sm">
               <li>Verifica la información de la película</li>
               <li>Verifica que la película exista</li>
