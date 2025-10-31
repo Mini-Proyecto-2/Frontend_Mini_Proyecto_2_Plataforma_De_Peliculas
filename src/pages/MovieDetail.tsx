@@ -3,11 +3,17 @@ import { useParams, useNavigate } from "react-router-dom";
 import type { PexelsVideo } from "../types/pexels";
 import { getPexelsById } from "../service/pexels";
 import { extractTitleFromUrl } from "../lib/extractTitleFromUrl";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircleIcon, Play } from "lucide-react";
+import { MovieReactionButtons } from "@/components/movieDetails/MovieReactionButtons";
+import { Button } from "@/components/ui/button";
+import RatingStarts from "@/components/movieDetails/RatingStarts";
 
 export default function MovieDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [movie, setMovie] = useState<PexelsVideo | null>(null);
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     if (!id) {
@@ -20,59 +26,86 @@ export default function MovieDetail() {
         const data = await getPexelsById(id);
         setMovie(data);
       } catch (error) {
+        setError(true);
         console.error("Error cargando la película:", error);
-        navigate("/favoritos");
       }
     };
-    
+
     loadMovie();
-  }, [id, navigate]);
+  }, [id]);
 
-  // const toggleFavorite = async () => {
-  //   try {
-  //     if (isFavorite) {
-  //       await request(`/movies/${movie.id}`, "DELETE");
-  //       setIsFavorite(false);
-  //     } else {
-  //       await request("/movies", "POST", {
-  //         title: movie.title,
-  //         videoUrl: movie.videoUrl,
-  //         miniatureUrl: movie.miniatureUrl,
-  //         pexelsId: movie.pexelsId || "",
-  //       });
-  //       setIsFavorite(true);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error modificando favorito:", error);
-  //   }
-  // };
+  const handleClickButton = () => {
+    navigate(`/watch/${movie?.id}`);
+  };
 
-  if (!movie) return <div className="text-white">Cargando...</div>;
+  const title = extractTitleFromUrl(movie?.url || "");
 
-  const title = extractTitleFromUrl(movie.url);
+  if (error) {
+    return (
+      <div className="flex justify-center items-center p-6">
+        <Alert variant="destructive" className="bg-white lg:w-1/2 w-full lg:max-w-[600px] max-w-full">
+          <AlertCircleIcon />
+          <AlertTitle>Error cargando la película</AlertTitle>
+          <AlertDescription>
+            <p>Por favor, verifica la información de la película y vuelve a intentarlo.</p>
+            <ul className="list-inside list-disc text-sm">
+              <li>Verifica la información de la película</li>
+              <li>Verifica que la película exista</li>
+              <li>Verifica que la película no haya sido eliminada</li>
+            </ul>
+          </AlertDescription>
+        </Alert>
+      </div>
+    )
+  }
+
+  if (!movie) {
+    return (
+      <div
+        className="flex justify-between items-end bg-gradient-to-t from-primary via-transparent h-[60dvh] max-h-[1200px] p-6"
+        style={{
+          background: "linear-gradient(90deg, #2a2a2a 0%, #3a3a3a 50%, #2a2a2a 100%)",
+          animation: "shimmer 3s ease-in-out infinite",
+        }} />
+    )
+  }
 
   return (
-    <div className="text-white">
-      <img
-        src={movie.image}
-        alt={title}
-        className="w-full h-96 object-cover rounded-xl mb-6"
-      />
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-3xl font-bold">{title}</h1>
+    <div>
+      <div
+        className="flex justify-between items-end bg-gradient-to-t from-primary via-transparent h-[60dvh] max-h-[1200px] p-6"
+        style={{
+
+          background: `linear-gradient(transparent 0%, #242f3b67 75%, #242f3b 100%), url(${movie.image})`, backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}>
+        <section>
+          <p className="font-bold text-[2.2rem]">{title}</p>
+          <p className="text-gray-300 text-md">
+            {movie?.user.name}
+          </p>
+        </section>
+        <section className="flex gap-4">
+          <Button
+            className="bg-primary hover:bg-primary/80 h-10"
+            onClick={handleClickButton}>
+            <Play className="h-4 w-4" />Ver Película
+          </Button>
+          <MovieReactionButtons
+            movie={{
+              title: title,
+              pexelsUser: movie.user.name,
+              pexelsId: movie.id.toString(),
+              miniatureUrl: movie.image
+            }}
+          />
+        </section>
       </div>
 
-      {movie.video_files[0] && (
-        <video
-          controls
-          src={movie.video_files[0].link}
-          className="w-full rounded-lg shadow-lg"
-        />
-      )}
-
-      <p className="mt-4 text-gray-300">
-        {title || "Sin descripción disponible."}
-      </p>
+      <div className="p-6">
+        <RatingStarts id={movie.id} rating={14} />
+      </div>
     </div>
   );
 }

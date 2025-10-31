@@ -17,12 +17,9 @@ export default function Favorites() {
     loadFavorites();
   }, []);
 
-  if (!favorites.length) {
-    return <p>No tienes películas favoritas aún.</p>;
-  }
-
   return (
-    <div className="grid grid-cols-3 gap-4 p-4">
+    <div className="container w-full p-6">
+      <h1 className="font-bold">Películas favoritas</h1>
       {favorites.map((movie: any) => (
         <div key={movie._id} className="border p-3 rounded-lg">
           <img src={movie.miniatureUrl} alt={movie.title} className="rounded" />
