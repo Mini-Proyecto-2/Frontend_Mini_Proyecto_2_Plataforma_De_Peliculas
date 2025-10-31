@@ -28,8 +28,10 @@ import ResetPasswordModal from "../components/modals/ResetPasswordModal";
 import NewPasswordModal from "../components/modals/NewPasswordModal";
 import Settings from "../pages/Settings";
 import Profile from "../pages/Profile";
+import InfoPage from "../pages/InfoPage";
 import VideoPlayer from "../pages/VideoPlayer";
 import { Toaster } from "sonner";
+import type { JSX } from "react";
 
 /**
  * AppRoutes component.
@@ -54,7 +56,7 @@ import { Toaster } from "sonner";
  * }
  * ```
  */
-function AppRoutes() {
+function AppRoutes(): JSX.Element {
   // Current route location, possibly containing a `background` entry when navigating to modal routes.
   const location = useLocation();
 
@@ -87,8 +89,11 @@ function AppRoutes() {
             <Route path="/pelicula/:id" element={<MovieDetail />} />
           </Route>
           {/* VideoPlayer - ruta fuera del MainLayout para pantalla completa */}
-          <Route path="/video-player" element={<VideoPlayer />} />
+          <Route path="/video-player/" element={<VideoPlayer />} />
         </Route>
+
+        {/* Info Pages */}
+        <Route path="sobre-nosotros" element={<InfoPage />} />
 
         {/* SiteMap */}
         <Route path="mapa-sitio" element={<SiteMapPage />} />

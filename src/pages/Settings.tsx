@@ -32,7 +32,7 @@ import { deleteProfile, getProfile, updateProfile } from "@/service/profile";
 /**
  * Zod schema defining the shape and validation rules for profile data.
  */
-const profileSchema = z.object({
+const editProfileSchema = z.object({
   /** User first name. Required, max 50 characters. */
   firstName: z.string().min(1, "Este campo es obligatorio").max(50, "Máximo 50 caracteres"),
   /** User last name. Required, max 50 characters. */
@@ -43,10 +43,18 @@ const profileSchema = z.object({
   email: z.string().email("Debe ser un correo electrónico válido"),
 });
 
+const deleteProfileSchema = z.object({
+  /** User email. Must be a valid email address. */
+  email: z.string().email("Debe ser un correo electrónico válido"),
+  /** User password. Required, min 8 characters. */
+  password: z.string().min(8, "Mínimo 8 caracteres"),
+});
+
 /**
  * Inferred TypeScript type for the user profile based on the Zod schema.
  */
-type UserProfile = z.infer<typeof profileSchema>;
+type EditProfile = z.infer<typeof editProfileSchema>;
+type DeleteProfile = z.infer<typeof deleteProfileSchema>;
 
 /**
  * Profile settings page component.
@@ -73,13 +81,21 @@ export default function Settings() {
   /**
    * React Hook Form instance configured with Zod resolver and default values.
    */
-  const profileForm = useForm<UserProfile>({
-    resolver: zodResolver(profileSchema),
+  const editProfileForm = useForm<EditProfile>({
+    resolver: zodResolver(editProfileSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
       age: 18,
       email: "",
+    },
+  });
+
+  const deleteProfileForm = useForm<DeleteProfile>({
+    resolver: zodResolver(deleteProfileSchema),
+    defaultValues: {
+      email: "",
+      password: "",
     },
   });
 
@@ -92,7 +108,7 @@ export default function Settings() {
       setLoading(true);
       try {
         const data = await getProfile();
-        profileForm.reset(data);
+        editProfileForm.reset(data);
         setError(null);
       } catch {
         setError("No se pudo obtener el perfil");
@@ -102,7 +118,7 @@ export default function Settings() {
       }
     };
     loadProfile();
-  }, [profileForm]);
+  }, [editProfileForm]);
 
   /**
    * Handles form submission to update the profile.
@@ -110,7 +126,7 @@ export default function Settings() {
    * @param data - The validated profile data collected from the form.
    * @returns {Promise<void>} Resolves when the update flow finishes.
    */
-  const onSubmit = async (data: UserProfile) => {
+  const onSubmit = async (data: EditProfile) => {
     try {
       setLoading(true);
       setError(null);
@@ -130,13 +146,13 @@ export default function Settings() {
    *
    * @returns {Promise<void>} Resolves once the deletion flow completes.
    */
-  const handleDeleteAccount = async () => {
+  const handleDeleteAccount = async (data: DeleteProfile) => {
     const confirmed = confirm("¿Seguro que quieres eliminar tu cuenta?");
     if (!confirmed) return;
 
     try {
       setLoading(true);
-      await deleteProfile({ user: { userId: profileForm.getValues("email") } });
+      await deleteProfile(data);
       toast.success("Cuenta eliminada correctamente");
       navigate("/descubre");
     } catch {
@@ -148,8 +164,8 @@ export default function Settings() {
   };
 
   return (
-    <div className="p-8 max-w-2xl mx-auto">
-      <h2 className="text-3xl font-semibold mb-4 text-white">Configuración de perfil</h2>
+    <div className="p-8 w-full">
+      <h1 className="font-bold mb-8">Configuración</h1>
 
       {error && (
         <Alert variant="destructive" className="mb-4">
@@ -157,109 +173,174 @@ export default function Settings() {
         </Alert>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Información personal</CardTitle>
-          <CardDescription>Actualiza tu información de perfil</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...profileForm}>
-            <form onSubmit={profileForm.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={profileForm.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="firstName">Nombre</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="firstName"
-                        placeholder="Tu nombre"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+      <div className="flex gap-8 justify-center sm:flex-row flex-col">
+        <Card className="sm:max-w-[500px] max-w-full sm:w-1/2 w-full">
+          <CardHeader>
+            <CardTitle>Información personal</CardTitle>
+            <CardDescription>Actualiza tu información de perfil. Mantén tus datos actualizados para una experiencia personalizada.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...editProfileForm}>
+              <form onSubmit={editProfileForm.handleSubmit(onSubmit)} className="space-y-4">
+                <div className="flex gap-4">
+                  <FormField
+                    control={editProfileForm.control}
+                    name="firstName"
+                    render={({ field }) => (
+                      <FormItem className="w-1/2">
+                        <FormLabel htmlFor="firstName">Nombre</FormLabel>
+                        <FormControl>
+                          <Input
+                            id="firstName"
+                            placeholder="Tu nombre"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={editProfileForm.control}
+                    name="lastName"
+                    render={({ field }) => (
+                      <FormItem className="w-1/2">
+                        <FormLabel htmlFor="lastName">Apellido</FormLabel>
+                        <FormControl>
+                          <Input
+                            id="lastName"
+                            placeholder="Tu apellido"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex gap-4">
 
-              <FormField
-                control={profileForm.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="lastName">Apellido</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="lastName"
-                        placeholder="Tu apellido"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  <FormField
+                    control={editProfileForm.control}
+                    name="age"
+                    render={({ field }) => (
+                      <FormItem className="w-1/6">
+                        <FormLabel htmlFor="age">Edad</FormLabel>
+                        <FormControl>
+                          <Input
+                            id="age"
+                            type="number"
+                            placeholder="Tu edad"
+                            {...field}
+                            defaultValue={0}
+                            min={18}
+                            max={120}
+                            className="[&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              <FormField
-                control={profileForm.control}
-                name="age"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="age">Edad</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="age"
-                        type="number"
-                        placeholder="Tu edad"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  <FormField
+                    control={editProfileForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem className="w-5/6">
+                        <FormLabel htmlFor="email">Correo electrónico</FormLabel>
+                        <FormControl>
+                          <Input
+                            id="email"
+                            type="email"
+                            placeholder="Tu correo electrónico"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
-              <FormField
-                control={profileForm.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="email">Correo electrónico</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="Tu correo electrónico"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="flex gap-4 pt-2 justify-end">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleDeleteAccount}
-                  disabled={loading}
-                >
-                  Eliminar cuenta
-                </Button>
-
-                <Button
-                  type="submit"
-                  disabled={loading}
-                >
-                  {loading ? "Guardando..." : "Guardar cambios"}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+                <div className="flex gap-4 pt-2 justify-end">
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                  >
+                    {loading ? "Guardando..." : "Guardar cambios"}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+        <Card className="border-red-500 border-2 max-w-full sm:max-w-[500px] sm:w-1/2">
+          <CardHeader>
+            <CardTitle className="text-red-500">Atención</CardTitle>
+            <CardDescription className="text-red-500">
+              Al eliminar tu cuenta perderás todos tus datos y no podrás volver a
+              acceder a ellos.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...deleteProfileForm}>
+              <form onSubmit={deleteProfileForm.handleSubmit(handleDeleteAccount)} className="space-y-4">
+                <FormField
+                  control={deleteProfileForm.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="text-red-500">
+                      <FormLabel htmlFor="deleteEmail">
+                        Confirma tu correo electrónico para eliminar tu cuenta
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          id="deleteEmail"
+                          type="email"
+                          placeholder="Confirma tu correo electrónico"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={deleteProfileForm.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem className="text-red-500">
+                      <FormLabel htmlFor="deletePassword">
+                        Contraseña
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          id="deletePassword"
+                          type="password"
+                          placeholder="Tu contraseña"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex gap-4 pt-2 justify-end">
+                  <Button
+                    type="submit"
+                    variant="destructive"
+                    className="text-white"
+                    disabled={loading}
+                  >
+                    {loading ? "Eliminando..." : "Eliminar cuenta"}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

@@ -17,6 +17,6 @@ export const extractTitleFromUrl = (url: string) => {
     
     return title;
   } catch (error) {
-    return 'Error al procesar URL';
+    return '';
   }
 }
