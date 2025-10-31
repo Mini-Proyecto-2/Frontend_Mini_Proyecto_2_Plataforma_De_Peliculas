@@ -29,9 +29,10 @@ export function FavoriteButton({
       if (reload) {
         reload();
       }
+      toast.success(isLiked ? "Película removida de favoritos" : "Película agregada a favoritos");
       setIsLiked(!isLiked);
     } catch (error) {
-      toast.error(isLiked ? "Error al quitar la película de favoritos" : "Error al agregar la película a favoritos");
+      toast.error(isLiked ? "Error al remover la película de favoritos" : "Error al agregar la película a favoritos");
     } finally {
       setLoading(false);
     }

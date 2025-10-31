@@ -78,7 +78,7 @@ const RatingStars: React.FC<RatingStarsProps> = ({ id }) => {
   };
 
   return (
-    <section className="flex gap-2 items-center">
+    <section className="flex gap-2 items-center sticky-none lg:sticky top-34 h-max">
       <div className="flex gap-1">{renderStars()}</div>
       <section className=''>
         <p className='text-xs'>{rating.averageRating.toFixed(1)}/5</p>
