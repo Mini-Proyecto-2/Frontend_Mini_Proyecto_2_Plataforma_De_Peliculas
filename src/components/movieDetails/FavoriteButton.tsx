@@ -6,15 +6,15 @@ import { getFavoriteById, removeFavorite, addFavorite } from '@/service/movies';
 import { toast } from 'sonner';
 import type { Movie } from '@/types/movie';
 
-interface MovieReactionButtonsProps {
+interface FavoriteButtonProps {
   movie: Movie
   reload?: () => void
 }
 
-export function MovieReactionButtons({ 
+export function FavoriteButton({ 
   movie, 
   reload
-}: MovieReactionButtonsProps) {
+}: FavoriteButtonProps) {
   const [isLiked, setIsLiked] = useState<boolean>(Boolean(reload));
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -23,14 +23,11 @@ export function MovieReactionButtons({
     try {
       if (isLiked) {
         await removeFavorite(movie.pexelsId);
-        if (reload) {
-          reload();
-        }
       } else {
         await addFavorite(movie);
-        if (reload) {
-          reload();
-        }
+      }
+      if (reload) {
+        reload();
       }
       setIsLiked(!isLiked);
     } catch (error) {

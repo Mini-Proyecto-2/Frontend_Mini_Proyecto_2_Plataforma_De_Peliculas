@@ -5,10 +5,10 @@ import { getPexelsById } from "../service/pexels";
 import { extractTitleFromUrl } from "../lib/movie";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon, Play } from "lucide-react";
-import { MovieReactionButtons } from "@/components/movieDetails/MovieReactionButton";
 import { Button } from "@/components/ui/button";
 import RatingStarts from "@/components/movieDetails/RatingStarts";
 import { Comment } from "@/components/movieDetails/Comment";
+import { FavoriteButton } from "@/components/movieDetails/FavoriteButton";
 
 export default function MovieDetail() {
   const { id } = useParams();
@@ -93,7 +93,7 @@ export default function MovieDetail() {
             onClick={handleClickButton}>
             <Play className="h-4 w-4" />Reproducir
           </Button>
-          <MovieReactionButtons
+          <FavoriteButton
             movie={{
               title: title,
               pexelUser: movie.user.name,
