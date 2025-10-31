@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import type { PexelsVideo } from "../types/pexels";
 import { getPexelsById } from "../service/pexels";
-import { extractTitleFromUrl } from "../lib/extractTitleFromUrl";
+import { extractTitleFromUrl } from "../lib/movie";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon, Play } from "lucide-react";
-import { MovieReactionButtons } from "@/components/movieDetails/MovieReactionButtons";
+import { MovieReactionButtons } from "@/components/movieDetails/MovieReactionButton";
 import { Button } from "@/components/ui/button";
 import RatingStarts from "@/components/movieDetails/RatingStarts";
+import { Comment } from "@/components/movieDetails/Comment";
 
 export default function MovieDetail() {
   const { id } = useParams();
@@ -73,7 +74,7 @@ export default function MovieDetail() {
   return (
     <div>
       <div
-        className="flex justify-between items-end bg-gradient-to-t from-primary via-transparent h-[60dvh] max-h-[1200px] p-6"
+        className="flex justify-between items-end bg-gradient-to-t from-primary via-transparent h-[60dvh] max-h-[1200px] p-8"
         style={{
 
           background: `linear-gradient(transparent 0%, #242f3b67 75%, #242f3b 100%), url(${movie.image})`, backgroundRepeat: 'no-repeat',
@@ -95,7 +96,7 @@ export default function MovieDetail() {
           <MovieReactionButtons
             movie={{
               title: title,
-              pexelsUser: movie.user.name,
+              pexelUser: movie.user.name,
               pexelsId: movie.id.toString(),
               miniatureUrl: movie.image
             }}
@@ -103,8 +104,18 @@ export default function MovieDetail() {
         </section>
       </div>
 
-      <div className="p-6">
+      <div className="p-8 space-y-4">
         <RatingStarts id={movie.id} rating={14} />
+        <h3 className="font-bold text-2xl">Comentarios</h3>
+        <section className="flex flex-col gap-4">
+          <Comment author={{ firstName: "Mauricio", lastName: "Teherán" }} text="Excelente película" />
+          <Comment author={{ firstName: "Felipe", lastName: "Lopez" }} text="Muy buena película" />
+          <Comment author={{ firstName: "Daniela", lastName: "Garcia" }} text="Realmente emocionante" />
+          <Comment author={{ firstName: "Estefania", lastName: "Rodriguez" }} text="Increible película, despierta todo lo que uno quiere como aficionado" />
+          <Comment author={{ firstName: "Juan", lastName: "Perez" }} text="Excelente historia" />
+          <Comment author={{ firstName: "Maria", lastName: "Gomez" }} text="Me encanto la actuación" />
+          
+        </section>
       </div>
     </div>
   );

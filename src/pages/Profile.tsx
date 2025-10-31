@@ -24,6 +24,7 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { Spinner } from '@/components/ui/spinner';
 import { Skeleton } from '@/components/ui/skeleton';
+import { getInitials } from '@/lib/avatar';
 
 /**
  * Shape of the profile object returned by the API.
@@ -73,12 +74,8 @@ export default function Profile() {
    * @param lastName - User last name.
    * @returns Uppercased initials (e.g., "MT" for "Mauricio Teherán").
    */
-  const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
-  };
-
   return (
-    <div className="container w-full p-6">
+    <div className="container w-full p-8">
       <h1 className="font-bold">Perfil</h1>
       <Card className="border-0 shadow-lg mt-16 w-2/3 mx-auto px-4">
         <CardHeader className="relative pt-0 pb-6">

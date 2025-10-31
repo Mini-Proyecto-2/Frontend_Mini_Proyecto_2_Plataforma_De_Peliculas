@@ -1,6 +1,6 @@
 export type Movie = {
     title: string;
-    pexelsUser: string;
+    pexelUser: string;
     pexelsId: string;
     miniatureUrl: string;
 };

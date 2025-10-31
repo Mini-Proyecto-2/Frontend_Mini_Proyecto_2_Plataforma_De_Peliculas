@@ -164,7 +164,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="p-6 w-full">
+    <div className="p-8 w-full">
       <h1 className="font-bold mb-8">Configuración</h1>
 
       {error && (

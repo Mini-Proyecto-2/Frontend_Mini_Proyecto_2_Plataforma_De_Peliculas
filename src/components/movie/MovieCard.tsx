@@ -1,4 +1,4 @@
-import { extractTitleFromUrl } from '@/lib/extractTitleFromUrl';
+import { extractTitleFromUrl } from '@/lib/movie';
 import React from 'react';
 import { Button } from '../ui/button';
 import { Play } from 'lucide-react';

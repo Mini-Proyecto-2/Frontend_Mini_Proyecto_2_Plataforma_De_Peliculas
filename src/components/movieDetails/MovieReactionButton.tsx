@@ -36,7 +36,7 @@ export function MovieReactionButtons({
     const loadMovie = async () => {
       try {
         const data = await getFavoriteById(movie.pexelsId);
-        setIsLiked(!!data);
+        setIsLiked(!!data.exists);
       } catch (error) {
         toast.error("Error cargando la película");
       }

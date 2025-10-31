@@ -31,7 +31,7 @@ import type { JSX } from "react"
  */
 export default function Dashboard(): JSX.Element {
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-8 p-8">
       <h1 className="font-bold">Dashboard</h1>
         <>
           <section key="movies" className="space-y-4">

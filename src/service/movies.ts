@@ -12,7 +12,7 @@ export const getFavoriteById = async (movieId: string) => {
 };
 
 export const addFavorite = async (movie: Movie) => {
-  return request("movies", "POST", { movie });
+  return request("movies", "POST", movie);
 };
 
 export const removeFavorite = async (movieId: string) => {
