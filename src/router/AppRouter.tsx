@@ -13,6 +13,7 @@ import ResetPasswordModal from "../components/modals/ResetPasswordModal";
 import NewPasswordModal from "../components/modals/NewPasswordModal";
 import Settings from "../pages/Settings";
 import Profile from "../pages/Profile";
+import VideoPlayer from "../pages/VideoPlayer";
 import { Toaster } from "sonner";
 
 function AppRoutes() {
@@ -36,6 +37,8 @@ function AppRoutes() {
             <Route path="configuracion" element={<Settings />} />
             <Route path="perfil" element={<Profile />} />
           </Route>
+          {/* VideoPlayer - ruta fuera del MainLayout para pantalla completa */}
+          <Route path="/video-player" element={<VideoPlayer />} />
         </Route>
 
         {/* SiteMap */}
