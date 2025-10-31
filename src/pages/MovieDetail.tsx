@@ -36,7 +36,7 @@ export default function MovieDetail() {
   }, [id]);
 
   const handleClickButton = () => {
-    navigate(`/watch/${movie?.id}`);
+    navigate("/video-player", { state: { video: movie } })
   };
 
   const title = extractTitleFromUrl(movie?.url || "");

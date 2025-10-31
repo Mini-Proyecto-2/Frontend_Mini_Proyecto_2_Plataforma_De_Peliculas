@@ -44,18 +44,6 @@ const loginSchema = z.object({
 })
 
 /**
-<<<<<<< HEAD
- * Type inference from Zod schema for form values.
- * 
- * @typedef {Object} LoginFormValues
- * @property {string} username - User's email address
- * @property {string} password - User's password
- */
-type LoginFormValues = z.infer<typeof loginSchema>;
-
-/**
-=======
->>>>>>> origin/Develop
  * Interface for React Router location state.
  * Used to preserve the background location when modal is opened.
  * 
@@ -157,7 +145,8 @@ export default function LoginModal() {
    * @returns {void}
    */
   const handleClose = () => {
-    if (!loading) navigate("/descubre");
+    if (background && !loading) navigate(background.pathname);
+    else navigate("/descubre");
   };
 
   /**

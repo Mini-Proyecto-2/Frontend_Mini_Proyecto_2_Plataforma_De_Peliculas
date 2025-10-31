@@ -186,16 +186,16 @@ export default function WelcomePage() {
         {/* Footer Links */}
         <div className="mt-20 text-center">
           <div className="flex flex-wrap justify-center gap-8 text-gray-400">
-            <a href="/sobre-nosotros" className="hover:text-white transition-colors">
+            <a href="/sobre-nosotros#about" className="hover:text-white transition-colors">
               Sobre nosotros
             </a>
             <a href="/mapa-sitio" className="hover:text-white transition-colors">
               Mapa del sitio
             </a>
-            <a href="/contacto" className="hover:text-white transition-colors">
+            <a href="/sobre-nosotros#contact" className="hover:text-white transition-colors">
               Contacto
             </a>
-            <a href="/ayuda" className="hover:text-white transition-colors">
+            <a href="/sobre-nosotros#help" className="hover:text-white transition-colors">
               Ayuda
             </a>
           </div>

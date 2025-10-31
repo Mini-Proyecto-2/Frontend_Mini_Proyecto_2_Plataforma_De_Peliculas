@@ -38,6 +38,7 @@ import {
   Settings,
   LogOut,
   User,
+  Map,
 } from 'lucide-react';
 import logo from '@/assets/logo-white.png';
 
@@ -71,6 +72,11 @@ const MainLayout = () => {
     { icon: Home, label: 'Inicio', href: '/' },
     { icon: User, label: 'Perfil', href: '/perfil' },
     { icon: Heart, label: 'Favoritos', href: '/favoritos' },
+  ];
+
+  const menuItemsFooter = [
+    { icon: Map, label: 'Mapa del sitio', href: '/mapa-sitio' },
+    { icon: Settings, label: 'Configuración', href: '/configuracion' },
   ];
 
   return (
@@ -108,17 +114,19 @@ const MainLayout = () => {
             <SidebarGroup>
               <SidebarGroupContent>
                 <SidebarMenu className='space-y-1'>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      asChild
-                      className="text-white hover:bg-white/10"
-                    >
-                      <Link to="/configuracion" className="flex items-center gap-4 py-3">
-                        <Settings className="h-8 w-8" />
-                        <span className="text-md">Configuración</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+                  {menuItemsFooter.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton
+                        asChild
+                        className="text-white hover:bg-white/10"
+                      >
+                        <Link to={item.href} className="flex items-center gap-4 py-3 hover:outline-none">
+                          <item.icon className="h-8 w-8" />
+                          <span className="text-md">{item.label}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
                   <SidebarMenuItem>
                     <SidebarMenuButton
                       onClick={handleLogout}
