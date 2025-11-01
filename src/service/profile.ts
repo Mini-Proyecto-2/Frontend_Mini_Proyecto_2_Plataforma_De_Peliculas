@@ -49,6 +49,10 @@ export const updateProfile = async (body: any): Promise<any> => {
   return request("auth/profile", "PUT", body);
 };
 
+export const changePassword = async (body: {currentPassword: string, newPassword: string}): Promise<any> => {
+  return request("auth/change-password", "POST", body);
+};
+
 /**
  * Deletes the authenticated user's profile and account from the system.
  *
@@ -63,6 +67,6 @@ export const updateProfile = async (body: any): Promise<any> => {
  * console.log("Account successfully deleted");
  * ```
  */
-export const deleteProfile = async (body: any) => {
+export const deleteProfile = async (body: {password: string}) => {
   return request("auth/profile", "DELETE", body);
 };
