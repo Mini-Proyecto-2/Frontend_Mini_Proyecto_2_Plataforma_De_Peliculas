@@ -29,7 +29,7 @@ export const EditAlert = ({ title, description, onConfirm }: EditAlertProps) => 
   const handleAction = async () => {
     setLoading(true);
     try {
-      await onConfirm("");
+      await onConfirm(commentForm.getValues("comment"));
     } catch (error) {
       console.error("Error al ejecutar acción", error);
     } finally {

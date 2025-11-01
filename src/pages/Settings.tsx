@@ -25,7 +25,6 @@ import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import { deleteProfile, getProfile, updateProfile } from "@/service/profile";
 
@@ -74,8 +73,6 @@ type DeleteProfile = z.infer<typeof deleteProfileSchema>;
 export default function Settings() {
   /** Loading state to disable actions and provide user feedback. */
   const [loading, setLoading] = useState(false);
-  /** Error message to render within the alert component. */
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   /**
@@ -109,9 +106,7 @@ export default function Settings() {
       try {
         const data = await getProfile();
         editProfileForm.reset(data);
-        setError(null);
       } catch {
-        setError("No se pudo obtener el perfil");
         toast.error("No se pudo obtener el perfil");
       } finally {
         setLoading(false);
@@ -129,12 +124,10 @@ export default function Settings() {
   const onSubmit = async (data: EditProfile) => {
     try {
       setLoading(true);
-      setError(null);
       await updateProfile(data);
       toast.success("Perfil actualizado correctamente");
-    } catch {
-      setError("Error al guardar cambios");
-      toast.error("Error al guardar cambios");
+    } catch (error) {
+        toast.error("Error al actualizar el perfil");
     } finally {
       setLoading(false);
     }
@@ -155,8 +148,7 @@ export default function Settings() {
       await deleteProfile(data);
       toast.success("Cuenta eliminada correctamente");
       navigate("/descubre");
-    } catch {
-      setError("Error al eliminar la cuenta");
+    } catch (error) {
       toast.error("Error al eliminar la cuenta");
     } finally {
       setLoading(false);
@@ -167,14 +159,8 @@ export default function Settings() {
     <div className="p-8 w-full">
       <h1 className="font-bold mb-8">Configuración</h1>
 
-      {error && (
-        <Alert variant="destructive" className="mb-4">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-
-      <div className="flex gap-8 justify-center sm:flex-row flex-col">
-        <Card className="sm:max-w-[500px] max-w-full sm:w-1/2 w-full">
+      <div className="flex gap-8 justify-center md:flex-row flex-col">
+        <Card className="md:max-w-[500px] max-w-full md:w-1/2 w-full">
           <CardHeader>
             <CardTitle>Información personal</CardTitle>
             <CardDescription>Actualiza tu información de perfil. Mantén tus datos actualizados para una experiencia personalizada.</CardDescription>
@@ -275,7 +261,7 @@ export default function Settings() {
             </Form>
           </CardContent>
         </Card>
-        <Card className="border-red-500 border-2 max-w-full sm:max-w-[500px] sm:w-1/2">
+        <Card className="border-red-500 border-2 max-w-full md:max-w-[500px] md:w-1/2">
           <CardHeader>
             <CardTitle className="text-red-500">Atención</CardTitle>
             <CardDescription className="text-red-500">
