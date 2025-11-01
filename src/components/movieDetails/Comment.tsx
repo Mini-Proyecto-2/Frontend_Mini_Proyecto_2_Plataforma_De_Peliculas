@@ -1,56 +1,87 @@
 import React from 'react';
-import { Pencil, Trash2 } from 'lucide-react';
 import { getGradientFromString, getInitials } from '@/lib/avatar';
+import { toast } from 'sonner';
+import { deleteComment, editComment } from '@/service/comments';
+import { DeleteAlert } from '../alerts/delete';
+import { EditAlert } from '../alerts/edit';
 
 interface CommentProps {
   author: {
     firstName: string;
     lastName: string;
+    _id: string;
   };
   text: string;
-  onEdit?: () => void;
-  onDelete?: () => void;
+  createdAt: string;
+  reload: () => void;
+  id?: string;
 }
 
-export const Comment: React.FC<CommentProps> = ({ author, text, onEdit, onDelete }) => {
+const Comment: React.FC<CommentProps> = ({ author, text, createdAt, id, reload }) => {
+  const handleDeleteComment = async () => {
+    if (!id) return;
+    try {
+      await deleteComment(id);
+      reload();
+      toast.success("Comentario eliminado");
+    } catch (error) {
+      toast.error("Error al eliminar el comentario");
+    }
+  };
+
+  const handleEditComment = async (newText: string) => {
+    if (!id) return;
+    try {
+      await editComment(id, newText);
+      reload();
+      toast.success("Comentario editado");
+    } catch (error) {
+      toast.error("Error al editar el comentario");
+    }
+  };
+
   const fullName = `${author.firstName} ${author.lastName}`;
   const gradient = getGradientFromString(author.firstName);
   const initials = getInitials(author.firstName, author.lastName);
 
   return (
-    <div className="flex gap-3 p-4 bg-neutral-900 rounded-lg lg:w-1/3 w-full lg:min-w-[600px] lg:max-w-[800px]">
-      {/* Avatar con iniciales */}
-      <div className={`flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-semibold`}>
-        {initials}
-      </div>
-      
-      {/* Contenido */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between mb-1">
-          <strong className="text-white">{fullName}</strong>
-          <div className="flex gap-2">
-            {onEdit && (
-              <button
-                onClick={onEdit}
-                className="p-1.5 hover:bg-neutral-800 rounded transition-colors text-neutral-400 hover:text-white"
-                aria-label="Editar comentario"
-              >
-                <Pencil size={16} />
-              </button>
-            )}
-            {onDelete && (
-              <button
-                onClick={onDelete}
-                className="p-1.5 hover:bg-neutral-800 rounded transition-colors text-neutral-400 hover:text-red-500"
-                aria-label="Eliminar comentario"
-              >
-                <Trash2 size={16} />
-              </button>
-            )}
-          </div>
+    <div className="flex gap-3 p-4 bg-neutral-900 rounded-lg justify-between">
+      <div className="flex gap-4">
+        {/* Avatar con iniciales */}
+        <div className={`flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-semibold`}>
+          {initials}
         </div>
-        <p className="text-neutral-300 text-sm leading-relaxed">{text}</p>
+        <section className="flex flex-col">
+          <div className="flex flex-col">
+            <span className='font-semibold text-lg'>
+              {fullName}
+            </span>
+            <span className="text-gray-400 text-[0.7rem] font-normal">{new Date(createdAt).toLocaleString('es-ES', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}
+            </span>
+          </div>
+          <p className="text-neutral-300 text-sm leading-relaxed mt-2">{text}</p>
+        </section>
+      </div>
+
+      {/* Contenido */}
+      <div className="flex gap-2 items-start">
+        {id && (
+          <>
+            <EditAlert
+              title="Editar comentario"
+              description={text}
+              onConfirm={(newText: string) => handleEditComment(newText)}
+            />
+            <DeleteAlert
+              title="Eliminar comentario"
+              description="¿Estás seguro de eliminar este comentario?"
+              onConfirm={() => handleDeleteComment()}
+            />
+          </>
+        )}
       </div>
     </div>
   );
 };
+
+export default Comment;
