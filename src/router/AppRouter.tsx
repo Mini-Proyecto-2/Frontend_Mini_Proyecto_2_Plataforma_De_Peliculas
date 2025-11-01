@@ -11,7 +11,7 @@
  * - Modal routes are conditionally rendered using the `background` location pattern.
  */
 
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { AuthProvider } from "../context/AuthContext";
 import PublicRoute from "../components/router/PublicRoute";
 import ProtectedRoute from "../components/router/ProtectedRoute";
@@ -31,6 +31,7 @@ import Profile from "../pages/Profile";
 import InfoPage from "../pages/InfoPage";
 import VideoPlayer from "../pages/VideoPlayer";
 import { Toaster } from "sonner";
+import { useEffect, useRef } from "react";
 import type { JSX } from "react";
 
 /**
@@ -59,6 +60,7 @@ import type { JSX } from "react";
 function AppRoutes(): JSX.Element {
   // Current route location, possibly containing a `background` entry when navigating to modal routes.
   const location = useLocation();
+  const navigate = useNavigate();
 
   /**
    * Optional background location to support "modal over page" navigation.
@@ -68,6 +70,41 @@ function AppRoutes(): JSX.Element {
    * @see https://reactrouter.com/en/main/hooks/use-location#modals
    */
   const background = location.state?.background;
+
+  /**
+   * Modal routes that require a background location.
+   * If navigated to directly without background, redirect with background set.
+   */
+  const modalRoutes = ['/iniciar-sesion', '/registrarse', '/recuperar-contraseña'];
+  
+  /**
+   * Ref to track if we've already handled background setup for the current route.
+   * Prevents infinite redirect loops.
+   */
+  const handledRouteRef = useRef<string | null>(null);
+
+  /**
+   * Effect to handle direct navigation to modal routes.
+   * If user navigates directly to a modal route without background, 
+   * redirect with background set to /descubre.
+   */
+  useEffect(() => {
+    const isModalRoute = modalRoutes.includes(location.pathname);
+    
+    // Only handle if it's a modal route, has no background, and we haven't handled this route yet
+    if (isModalRoute && !background && handledRouteRef.current !== location.pathname) {
+      handledRouteRef.current = location.pathname;
+      
+      // Redirect to the same route but with background set to /descubre
+      navigate(location.pathname, {
+        state: { background: { pathname: '/descubre', search: '', hash: '', state: null, key: 'default' } },
+        replace: true,
+      });
+    } else if (!isModalRoute) {
+      // Reset the ref when we're not on a modal route
+      handledRouteRef.current = null;
+    }
+  }, [location.pathname, background, navigate]);
 
   return (
     <>

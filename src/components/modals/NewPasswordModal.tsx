@@ -6,17 +6,19 @@
  */
 
 import { useNavigate, useSearchParams, useLocation, type Location as RouterLocation } from 'react-router-dom';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form';
+import { Form, FormField, FormItem, FormLabel, FormControl } from '../ui/form';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Input } from '../ui/input';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, AlertCircle, Check, X } from 'lucide-react';
 import { Button } from '../ui/button';
 import logo from '@/assets/logo.png';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { validateResetToken, confirmResetPassword } from '@/service/auth';
+import { Spinner } from '../ui/spinner';
 
 /**
  * Zod schema for password reset form validation.
@@ -160,21 +162,44 @@ export default function NewPasswordModal() {
    * Used to disable form submission and show loading indicator.
    */
   const [loading, setLoading] = useState(false);
+  const [validatingToken, setValidatingToken] = useState(true);
+  const [tokenValid, setTokenValid] = useState(false);
+  const [tokenError, setTokenError] = useState<string | null>(null);
 
   /**
    * Effect to validate token presence on component mount.
-   * Redirects to welcome page if token is missing or invalid.
+   * Validates the reset token with the backend API.
    * 
    * @effect
    * @dependency {string | null} token - Reset token from URL
-   * @dependency {Function} navigate - Navigation function
    */
   useEffect(() => {
-    if (!token) {
-      toast.error('Token inválido o expirado');
-      navigate('/welcome');
-    }
-  }, [token, navigate]);
+    const checkToken = async () => {
+      if (!token) {
+        setTokenError('Enlace inválido o caducado');
+        setValidatingToken(false);
+        return;
+      }
+
+      try {
+        setValidatingToken(true);
+        await validateResetToken(token);
+        setTokenValid(true);
+        setTokenError(null);
+      } catch (error) {
+        if (error instanceof Error) {
+          setTokenError(error.message || 'Enlace inválido o caducado');
+        } else {
+          setTokenError('Enlace inválido o caducado');
+        }
+        setTokenValid(false);
+      } finally {
+        setValidatingToken(false);
+      }
+    };
+
+    checkToken();
+  }, [token]);
 
   /**
    * React Hook Form instance for password reset form.
@@ -184,6 +209,28 @@ export default function NewPasswordModal() {
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: { password: "", confirmPassword: "" },
   });
+
+  /**
+   * Watch password and confirmPassword values for dynamic validation
+   */
+  const passwordValue = resetPasswordForm.watch('password') || '';
+  const confirmPasswordValue = resetPasswordForm.watch('confirmPassword') || '';
+
+  /**
+   * Validates password requirements and returns validation status for each rule
+   */
+  const passwordRequirements = {
+    minLength: passwordValue.length >= 8,
+    hasLowercase: /[a-z]/.test(passwordValue),
+    hasUppercase: /[A-Z]/.test(passwordValue),
+    hasNumber: /[0-9]/.test(passwordValue),
+    hasSpecialChar: /\W/.test(passwordValue),
+  };
+
+  /**
+   * Checks if passwords match
+   */
+  const passwordsMatch = passwordValue === confirmPasswordValue && confirmPasswordValue.length > 0;
 
   /**
    * Handles password reset form submission.
@@ -214,18 +261,17 @@ export default function NewPasswordModal() {
    * @todo Import resetPassword service function
    */
   const handleResetPassword = async (values: z.infer<typeof resetPasswordSchema>) => {
+    if (!token) return;
+
     try {
       setLoading(true);
-      
-      // Call password reset API endpoint
-      // await resetPassword(token!, values.password);
-      console.log('Token:', token, 'Nueva contraseña:', values.password);
-
-      // Show success notification
+      await confirmResetPassword(token, values.password);
       toast.success("Contraseña restablecida exitosamente");
-
-      // Redirect to discover page, preserving background if available
-      navigate('/descubre', { state: { background: location.state?.background } });
+      
+      // Redirigir al login después de un breve delay
+      setTimeout(() => {
+        navigate('/iniciar-sesion', { state: { background: location.state?.background } });
+      }, 1000);
     } catch (error) {
       // Handle and display error
       if (error instanceof Error) {
@@ -239,11 +285,59 @@ export default function NewPasswordModal() {
     }
   };
 
-  /**
-   * Early return if token is not present.
-   * Prevents rendering the form without a valid token.
-   */
-  if (!token) return null;
+  // Mostrar spinner mientras se valida el token
+  if (validatingToken) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-[450px]">
+          <CardContent className="pt-10 pb-10">
+            <div className="flex flex-col items-center justify-center gap-4">
+              <Spinner className="size-[3rem]" />
+              <p className="text-muted-foreground">Validando enlace...</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Mostrar error si el token es inválido
+  if (!tokenValid || tokenError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-[450px]">
+          <CardHeader className='flex flex-col items-center'>
+            <CardTitle><img src={logo} alt="Logo" className="h-20" /></CardTitle>
+            <CardDescription className="text-primary text-md">El cine nos une</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="flex items-center gap-3 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
+              <AlertCircle className="h-5 w-5 text-destructive flex-shrink-0" />
+              <p className="text-sm text-destructive">
+                {tokenError || 'Enlace inválido o caducado'}
+              </p>
+            </div>
+            <div className="flex flex-col gap-3">
+              <Button
+                variant="outline"
+                onClick={() => navigate('/descubre')}
+                className="w-full"
+              >
+                Ir al inicio
+              </Button>
+              <Button
+                variant="link"
+                onClick={() => navigate('/recuperar-contraseña', { state: { background: location } })}
+                className="w-full"
+              >
+                Reenviar enlace
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -281,7 +375,41 @@ export default function NewPasswordModal() {
                         </button>
                       </div>
                     </FormControl>
-                    <FormMessage />
+                  {/* Mostrar restricciones pendientes en lista separada por comas */}
+                  {passwordValue.length > 0 && (() => {
+                    const pendingRequirements = [];
+
+                    if (!passwordRequirements.minLength) {
+                      pendingRequirements.push('8 caracteres');
+                    }
+                    if (!passwordRequirements.hasLowercase || !passwordRequirements.hasUppercase) {
+                      pendingRequirements.push('una letra mayúscula y minúscula');
+                    }
+                    if (!passwordRequirements.hasNumber) {
+                      pendingRequirements.push('un número');
+                    }
+                    if (!passwordRequirements.hasSpecialChar) {
+                      pendingRequirements.push('un carácter especial');
+                    }
+
+                    if (pendingRequirements.length > 0) {
+                      return (
+                        <div className="mt-2 flex items-start gap-1.5 text-xs text-destructive">
+                          <X className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
+                          <span className="flex-1">
+                            <span className="font-medium">La contraseña debe tener:</span>{' '}
+                            {pendingRequirements.join(', ')}
+                          </span>
+                        </div>
+                      );
+                    }
+                    return (
+                      <div className="mt-2 flex items-center gap-2 text-xs text-green-600">
+                        <Check className="h-3.5 w-3.5" />
+                        <span>Contraseña válida</span>
+                      </div>
+                    );
+                  })()}
                   </FormItem>
                 )}
               />
@@ -312,7 +440,19 @@ export default function NewPasswordModal() {
                         </button>
                       </div>
                     </FormControl>
-                    <FormMessage />
+                    {/* Mostrar validación de coincidencia dinámicamente */}
+                    {confirmPasswordValue.length > 0 && (
+                      <div className="mt-2">
+                        <div className={`flex items-center gap-2 text-xs ${passwordsMatch ? 'text-green-600' : 'text-destructive'}`}>
+                          {passwordsMatch ? (
+                            <Check className="h-3.5 w-3.5" />
+                          ) : (
+                            <X className="h-3.5 w-3.5" />
+                          )}
+                          <span>Las contraseñas coinciden</span>
+                        </div>
+                      </div>
+                    )}
                   </FormItem>
                 )}
               />

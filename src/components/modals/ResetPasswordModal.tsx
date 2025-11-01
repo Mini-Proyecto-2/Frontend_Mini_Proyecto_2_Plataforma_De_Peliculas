@@ -22,6 +22,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { DialogDescription } from '@radix-ui/react-dialog';
 import logo from '@/assets/logo.png';
+import { resetPassword } from '@/service/auth';
 
 /**
  * Zod schema for password reset request form validation.
@@ -181,12 +182,7 @@ export default function ResetPasswordModal() {
   const handleResetPassword = async (values: z.infer<typeof resetPasswordSchema>) => {
     try {
       setLoading(true)
-
-      // Call forgot password API endpoint
-      // await forgotPassword(values.username);
-      console.log(values)
-      
-      // Redirect to login page (user will check email)
+      await resetPassword(values.username)
       navigate("/iniciar-sesion", { state: { background: location } })
 
       // Show success notification
@@ -196,7 +192,7 @@ export default function ResetPasswordModal() {
       if (error instanceof Error) {
         toast.error(error.message)
       } else {
-        toast.error("Error al iniciar sesión")
+        toast.error("Error al restablecer contraseña")
       }
     } finally {
       // Always reset loading state

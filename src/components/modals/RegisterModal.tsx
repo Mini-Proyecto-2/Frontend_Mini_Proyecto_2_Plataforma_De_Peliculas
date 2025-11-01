@@ -15,7 +15,7 @@ import { register } from '@/service/auth';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { Input } from '../ui/input';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Check, X } from 'lucide-react';
 import { Button } from '../ui/button';
 import logo from '@/assets/logo.png';
 import { DialogDescription } from '@radix-ui/react-dialog';
@@ -69,21 +69,26 @@ const registerSchema = z.object({
   email: z.string().email("Debe ser un correo válido"),
 
   /** 
-   * User's password (minimum 6 characters).
-   * @todo Increase to 8 characters and add complexity requirements to match confirmPassword
+   * User's password (minimum 8 characters with complexity requirements).
+   * Must include: lowercase, uppercase, digit, and special character.
    */
-  password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+  password: z
+    .string()
+    .min(8, "La contraseña debe tener al menos 8 caracteres")
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/, "La contraseña debe tener al menos un número, una letra mayúscula, una letra minúscula y un caracter especial"),
 
   /** 
    * Password confirmation (minimum 8 characters with complexity requirements).
    * Must include: lowercase, uppercase, digit, and special character.
-   * @todo Add .refine() to check password === confirmPassword
    */
   confirmPassword: z
     .string()
     .min(8, "La contraseña debe tener al menos 8 caracteres")
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/, "La contraseña debe tener al menos un número, una letra mayúscula, una letra minúscula y un caracter especial"),
-})
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Las contraseñas no coinciden",
+  path: ["confirmPassword"], // Error appears on confirmPassword field
+});
 
 /**
  * Interface for React Router location state.
@@ -179,6 +184,28 @@ export default function RegisterModal() {
     resolver: zodResolver(registerSchema),
     defaultValues: { first_name: "", last_name: "", email: "", age: 18, password: "", confirmPassword: "" },
   })
+
+  /**
+   * Watch password and confirmPassword values for dynamic validation
+   */
+  const passwordValue = registerForm.watch('password') || '';
+  const confirmPasswordValue = registerForm.watch('confirmPassword') || '';
+
+  /**
+   * Validates password requirements and returns validation status for each rule
+   */
+  const passwordRequirements = {
+    minLength: passwordValue.length >= 8,
+    hasLowercase: /[a-z]/.test(passwordValue),
+    hasUppercase: /[A-Z]/.test(passwordValue),
+    hasNumber: /[0-9]/.test(passwordValue),
+    hasSpecialChar: /\W/.test(passwordValue),
+  };
+
+  /**
+   * Checks if passwords match
+   */
+  const passwordsMatch = passwordValue === confirmPasswordValue && confirmPasswordValue.length > 0;
 
   /**
    * Handles modal close action.
@@ -365,7 +392,41 @@ export default function RegisterModal() {
                       </button>
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  {/* Mostrar restricciones pendientes en lista separada por comas */}
+                  {passwordValue.length > 0 && (() => {
+                    const pendingRequirements = [];
+
+                    if (!passwordRequirements.minLength) {
+                      pendingRequirements.push('8 caracteres');
+                    }
+                    if (!passwordRequirements.hasLowercase || !passwordRequirements.hasUppercase) {
+                      pendingRequirements.push('una letra mayúscula y minúscula');
+                    }
+                    if (!passwordRequirements.hasNumber) {
+                      pendingRequirements.push('un número');
+                    }
+                    if (!passwordRequirements.hasSpecialChar) {
+                      pendingRequirements.push('un carácter especial');
+                    }
+
+                    if (pendingRequirements.length > 0) {
+                      return (
+                        <div className="mt-2 flex items-start gap-1.5 text-xs text-destructive">
+                          <X className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
+                          <span className="flex-1">
+                            <span className="font-medium">La contraseña debe tener:</span>{' '}
+                            {pendingRequirements.join(', ')}
+                          </span>
+                        </div>
+                      );
+                    }
+                    return (
+                      <div className="mt-2 flex items-center gap-2 text-xs text-green-600">
+                        <Check className="h-3.5 w-3.5" />
+                        <span>Contraseña válida</span>
+                      </div>
+                    );
+                  })()}
                 </FormItem>
               )}
             />
@@ -380,7 +441,7 @@ export default function RegisterModal() {
                     <div className="relative">
                       <Input
                         type={showPassword ? "text" : "password"}
-                        placeholder="Ingresa la contraseña"
+                        placeholder="Confirma la contraseña"
                         {...field}
                       />
                       <button
@@ -396,7 +457,19 @@ export default function RegisterModal() {
                       </button>
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  {/* Mostrar validación de coincidencia dinámicamente */}
+                  {confirmPasswordValue.length > 0 && (
+                    <div className="mt-2">
+                      <div className={`flex items-center gap-2 text-xs ${passwordsMatch ? 'text-green-600' : 'text-destructive'}`}>
+                        {passwordsMatch ? (
+                          <Check className="h-3.5 w-3.5" />
+                        ) : (
+                          <X className="h-3.5 w-3.5" />
+                        )}
+                        <span>Las contraseñas coinciden</span>
+                      </div>
+                    </div>
+                  )}
                 </FormItem>
               )}
             />

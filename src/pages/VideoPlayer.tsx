@@ -57,12 +57,10 @@ export default function VideoPlayer() {
    */
   const handleMouseMove = () => {
     setShowControls(true);
-
     // Limpiar timeout anterior
     if (hideControlsTimeoutRef.current) {
       clearTimeout(hideControlsTimeoutRef.current);
     }
-
     // Ocultar controles después de 3 segundos de inactividad
     hideControlsTimeoutRef.current = window.setTimeout(() => {
       setShowControls(false);

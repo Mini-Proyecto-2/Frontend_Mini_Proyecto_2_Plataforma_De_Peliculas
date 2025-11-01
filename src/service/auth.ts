@@ -143,3 +143,77 @@ export async function logout(): Promise<void> {
     }
 }
 
+export async function resetPassword(email: string) {
+  const response = await fetch(API_URL + "auth/forgot-password", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message);
+  }
+
+  return await response.json();
+}
+
+/**
+ * Validates a password reset token.
+ *
+ * @async
+ * @function validateResetToken
+ * @param {string} token - The reset token to validate.
+ * @returns {Promise<{ message: string }>} Message indicating token validity.
+ *
+ * @throws {Error} Throws an error if the token is invalid or expired.
+ *
+ * @example
+ * ```ts
+ * try {
+ *   const result = await validateResetToken("abc123token");
+ *   console.log(result.message); // "Token válido"
+ * } catch (error) {
+ *   console.error("Token inválido:", error);
+ * }
+ * ```
+ */
+export async function validateResetToken(token: string): Promise<{ message: string }> {
+  const response = await fetch(API_URL + "auth/validate-reset-token", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Token inválido o expirado");
+  }
+
+  return await response.json();
+}
+
+export async function confirmResetPassword(token: string, password: string) {
+  const response = await fetch(API_URL + "auth/reset-password", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token, password }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Error al restablecer contraseña");
+  }
+
+  return await response.json();
+}
+
